@@ -86,3 +86,7 @@ def train_network(network, train, l_rate, n_epoch, n_outputs):
 			update_weights(network, row, l_rate)
 		print('>epoch=%d, lrate=%.3f, error=%.3f' % (epoch, l_rate, sum_error))
 
+# Make a prediction with a network
+def predict(network, row):
+	outputs = forward_propagate(network, row)
+	return outputs.index(max(outputs))
