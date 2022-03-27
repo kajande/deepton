@@ -1,10 +1,10 @@
 from random import seed
-from network import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
-from network import load_csv, str_column_to_float, str_column_to_int, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
+from main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
+from main import load_csv, str_column_to_float, str_column_to_int, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
 
 import unittest
 
-class TestNetwork(unittest.TestCase):
+class TestMain(unittest.TestCase):
     def test_initialize_network(self):
         seed(1)
         network = initialize_network(2, 1, 2)
