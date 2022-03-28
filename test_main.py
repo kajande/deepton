@@ -40,6 +40,8 @@ class TestCol(unittest.TestCase):
         col[1] = col_to_set
         self.assertListEqual(col[1], col_to_set)
 
+
+
 class TestDataset(unittest.TestCase):
     def setUp(self) -> None:        
         self.data = [['2.7810836','2.550537003','0'],
@@ -102,14 +104,22 @@ class TestTransforms(unittest.TestCase):
             ['8.675418651','-0.242068655','1'],
             ['7.673756466','3.508563011','1']]
 
-    # @unittest.skip("Testing Col")
     def test_to_float(self):
         dataset = Dataset('example.csv')
         to_float = ToFloat()
+        self.assertIsInstance(dataset.col[1][0], str)
         dataset.col[1] = to_float(dataset.col[1])
-        self.assertEqual(dataset.col[1][0], 2.550537003)
+        self.assertIsInstance(dataset.col[1][0], float)
 
-# @unittest.skip("Testing Col")
+    # @unittest.skip("Testing to_float")
+    def test_to_int(self):
+        dataset = Dataset('example.csv')
+        self.assertIsInstance(dataset.col[-1][0], str)
+        to_int = ToInt().fit(dataset.col[-1])
+        dataset.col[-1] = to_int(dataset.col[-1])
+        self.assertIsInstance(dataset.col[-1][0], int)
+
+# @unittest.skip("Testing ToInt")
 class TestMain(unittest.TestCase):
     def setUp(self) -> None:
         # load and prepare data
@@ -120,7 +130,8 @@ class TestMain(unittest.TestCase):
         for i in range(len(self.dataset[0])-1):
             self.dataset.col[i] = to_float(self.dataset.col[i])
         # convert class column to integers
-        ToInt(len(self.dataset[0])-1)(self.dataset)
+        to_int = ToInt().fit(self.dataset.col[-1])
+        self.dataset.col[-1] = to_int(self.dataset.col[-1])
 
 
     def test_initialize_network(self):

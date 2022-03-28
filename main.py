@@ -57,18 +57,21 @@ class ToFloat:
 
 class ToInt:
 	# Convert string column to integer
-	def __init__(self, column):
-		self.column = column
+	def __init__(self, lookup=None):
+		if lookup:
+			self.lookup = lookup
+		else:
+			self.lookup = dict()
 
-	def __call__(self, dataset):
-		class_values = [row[self.column] for row in dataset]
+	def fit(self, column):
+		class_values = column
 		unique = set(class_values)
-		lookup = dict()
 		for i, value in enumerate(unique):
-			lookup[value] = i
-		for row in dataset:
-			row[self.column] = lookup[row[self.column]]
-		return lookup
+			self.lookup[value] = i
+		return self
+
+	def __call__(self, column):
+		return [self.lookup[row] for row in column]
 
 # Find the min and max values for each column
 def dataset_minmax(dataset):
