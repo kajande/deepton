@@ -1,8 +1,44 @@
 from random import seed
 from main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
-from main import Dataset, ToFloat, ToInt, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
+from main import Dataset, ToFloat, ToInt, Col, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
 
 import unittest
+
+class TestCol(unittest.TestCase):
+    def test_getitem(self):
+        dataset = Dataset('example.csv')
+        col = Col(dataset)
+        col0 = [
+            '2.7810836',
+            '1.465489372',
+            '3.396561688',
+            '1.38807019',
+            '3.06407232',
+            '7.627531214',
+            '5.332441248',
+            '6.922596716',
+            '8.675418651',
+            '7.673756466',
+        ]
+        self.assertListEqual(col[0], col0)
+
+    def test_setitem(self):
+        dataset = Dataset('example.csv')
+        col = Col(dataset)
+        col_to_set = [
+            '2.7810836',
+            '1.465489372',
+            '3.396561688',
+            '1.38807019',
+            '3.06407232',
+            '7.627531214',
+            '5.332441248',
+            '6.922596716',
+            '8.675418651',
+            '7.673756466',
+        ]
+        col[1] = col_to_set
+        self.assertListEqual(col[1], col_to_set)
 
 class TestDataset(unittest.TestCase):
     def setUp(self) -> None:        
@@ -50,13 +86,8 @@ class TestDataset(unittest.TestCase):
             '8.675418651',
             '7.673756466',
         ]
-        self.assertListEqual(dataset.col(0), col0)
-
-    @unittest.skip("Implement Dataset.col first")
-    def test_copy(self):
-        dataset = Dataset('example.csv')
-        dataset_copy = dataset.copy()
-        self.assertListEqual(dataset.data, dataset_copy.data)
+        self.assertListEqual(dataset.col[0], col0)
+            
 
 class TestTransforms(unittest.TestCase):
     def setUp(self) -> None:
@@ -71,19 +102,23 @@ class TestTransforms(unittest.TestCase):
             ['8.675418651','-0.242068655','1'],
             ['7.673756466','3.508563011','1']]
 
-    @unittest.skip("Implement Dataset.col() first")
+    # @unittest.skip("Testing Col")
     def test_to_float(self):
-        to_float = ToFloat(1)
-        self.assertEqual(to_float(self.data)[0], 2.550537003)
+        dataset = Dataset('example.csv')
+        to_float = ToFloat()
+        dataset.col[1] = to_float(dataset.col[1])
+        self.assertEqual(dataset.col[1][0], 2.550537003)
 
+# @unittest.skip("Testing Col")
 class TestMain(unittest.TestCase):
     def setUp(self) -> None:
         # load and prepare data
         filename = 'example.csv'
         # filename = 'seeds_dataset.csv'
         self.dataset = Dataset(filename)
+        to_float = ToFloat()
         for i in range(len(self.dataset[0])-1):
-            ToFloat(i)(self.dataset)
+            self.dataset.col[i] = to_float(self.dataset.col[i])
         # convert class column to integers
         ToInt(len(self.dataset[0])-1)(self.dataset)
 

@@ -5,9 +5,22 @@ from random import random
 from csv import reader
 from math import exp
 
+class Col:
+	def __init__(self, dataset):
+		self.dataset = dataset
+
+	def __getitem__(self, i):
+		return list(map(lambda x: x[i], self.dataset))
+
+	def __setitem__(self, i, value):
+		for j in range(len(value)):
+			self.dataset[j][i] = value[j]
+
+
 class Dataset: 
 	def __init__(self, filename):
 		self.data = self._load_csv(filename)
+		self.col = Col(self)
 
 	# Load a CSV file
 	def _load_csv(self, filename):
@@ -20,8 +33,8 @@ class Dataset:
 				dataset.append(row)
 		return dataset
 
-	def col(self, i):
-		return list(map(lambda x: x[i], self.data))
+	# def col(self, i):
+	# 	return list(map(lambda x: x[i], self.data))
 
 	def __getitem__(self, i):
 		return self.data[i]
@@ -35,12 +48,12 @@ class Dataset:
 
 class ToFloat:
 	# Convert string column to float
-	def __init__(self, column):
-		self.column = column
-
-	def __call__(self, dataset):
-		for row in dataset:
-			row[self.column] = float(row[self.column].strip())
+	def __call__(self, column):
+		# for row in column:
+		for i in range(len(column)):
+			column[i] = float(column[i].strip())
+			# row[self.column] = float(row[self.column].strip())
+		return column
 
 class ToInt:
 	# Convert string column to integer
