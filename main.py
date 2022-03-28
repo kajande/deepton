@@ -20,6 +20,9 @@ class Dataset:
 				dataset.append(row)
 		return dataset
 
+	def col(self, i):
+		return list(map(lambda x: x[i], self.data))
+
 	def __getitem__(self, i):
 		return self.data[i]
 
