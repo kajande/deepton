@@ -5,16 +5,29 @@ from random import random
 from csv import reader
 from math import exp
 
-# Load a CSV file
-def load_csv(filename):
-	dataset = list()
-	with open(filename, 'r') as file:
-		csv_reader = reader(file)
-		for row in csv_reader:
-			if not row:
-				continue
-			dataset.append(row)
-	return dataset
+class Dataset:
+	def __init__(self, filename):
+		self.data = self._load_csv(filename)
+
+	# Load a CSV file
+	def _load_csv(self, filename):
+		dataset = list()
+		with open(filename, 'r') as file:
+			csv_reader = reader(file)
+			for row in csv_reader:
+				if not row:
+					continue
+				dataset.append(row)
+		return dataset
+
+	def __getitem__(self, i):
+		return self.data[i]
+
+	def __len__(self):
+		return len(self.data)
+
+	def __iter__(self):
+		return iter(self.data)
 
 # Convert string column to float
 def str_column_to_float(dataset, column):

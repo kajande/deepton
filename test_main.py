@@ -1,6 +1,6 @@
 from random import seed
 from main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
-from main import load_csv, str_column_to_float, str_column_to_int, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
+from main import Dataset, str_column_to_float, str_column_to_int, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
 
 import unittest
 
@@ -76,7 +76,7 @@ class TestMain(unittest.TestCase):
         seed(1)
         # load and prepare data
         filename = 'seeds_dataset.csv'
-        dataset = load_csv(filename)
+        dataset = Dataset(filename)
         for i in range(len(dataset[0])-1):
             str_column_to_float(dataset, i)
         # convert class column to integers
