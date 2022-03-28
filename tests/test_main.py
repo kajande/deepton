@@ -1,7 +1,8 @@
 from random import seed
 from main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
-from main import Dataset, ToFloat, ToInt, Col, dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
-
+from main import dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
+from data.extractor import Dataset, Col
+from data.transformer import ToFloat, ToInt
 import unittest
 
 class TestCol(unittest.TestCase):

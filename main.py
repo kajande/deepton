@@ -2,76 +2,7 @@
 from random import seed
 from random import randrange
 from random import random
-from csv import reader
 from math import exp
-
-class Col:
-	def __init__(self, dataset):
-		self.dataset = dataset
-
-	def __getitem__(self, i):
-		return list(map(lambda x: x[i], self.dataset))
-
-	def __setitem__(self, i, value):
-		for j in range(len(value)):
-			self.dataset[j][i] = value[j]
-
-
-class Dataset: 
-	def __init__(self, filename):
-		self.data = self._load_csv(filename)
-		self.col = Col(self)
-
-	# Load a CSV file
-	def _load_csv(self, filename):
-		dataset = list()
-		with open(filename, 'r') as file:
-			csv_reader = reader(file)
-			for row in csv_reader:
-				if not row:
-					continue
-				dataset.append(row)
-		return dataset
-
-	# def col(self, i):
-	# 	return list(map(lambda x: x[i], self.data))
-
-	def __getitem__(self, i):
-		return self.data[i]
-
-	def __len__(self):
-		return len(self.data)
-
-	def __iter__(self):
-		return iter(self.data)
-
-
-class ToFloat:
-	# Convert string column to float
-	def __call__(self, column):
-		# for row in column:
-		for i in range(len(column)):
-			column[i] = float(column[i].strip())
-			# row[self.column] = float(row[self.column].strip())
-		return column
-
-class ToInt:
-	# Convert string column to integer
-	def __init__(self, lookup=None):
-		if lookup:
-			self.lookup = lookup
-		else:
-			self.lookup = dict()
-
-	def fit(self, column):
-		class_values = column
-		unique = set(class_values)
-		for i, value in enumerate(unique):
-			self.lookup[value] = i
-		return self
-
-	def __call__(self, column):
-		return [self.lookup[row] for row in column]
 
 # Find the min and max values for each column
 def dataset_minmax(dataset):
