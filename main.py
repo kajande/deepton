@@ -5,7 +5,7 @@ from random import random
 from csv import reader
 from math import exp
 
-class Dataset:
+class Dataset: 
 	def __init__(self, filename):
 		self.data = self._load_csv(filename)
 
@@ -29,21 +29,30 @@ class Dataset:
 	def __iter__(self):
 		return iter(self.data)
 
-# Convert string column to float
-def str_column_to_float(dataset, column):
-	for row in dataset:
-		row[column] = float(row[column].strip())
 
-# Convert string column to integer
-def str_column_to_int(dataset, column):
-	class_values = [row[column] for row in dataset]
-	unique = set(class_values)
-	lookup = dict()
-	for i, value in enumerate(unique):
-		lookup[value] = i
-	for row in dataset:
-		row[column] = lookup[row[column]]
-	return lookup
+class ToFloat:
+	# Convert string column to float
+	def __init__(self, column):
+		self.column = column
+
+	def __call__(self, dataset):
+		for row in dataset:
+			row[self.column] = float(row[self.column].strip())
+
+class ToInt:
+	# Convert string column to integer
+	def __init__(self, column):
+		self.column = column
+
+	def __call__(self, dataset):
+		class_values = [row[self.column] for row in dataset]
+		unique = set(class_values)
+		lookup = dict()
+		for i, value in enumerate(unique):
+			lookup[value] = i
+		for row in dataset:
+			row[self.column] = lookup[row[self.column]]
+		return lookup
 
 # Find the min and max values for each column
 def dataset_minmax(dataset):
