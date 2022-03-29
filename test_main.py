@@ -60,18 +60,26 @@ class TestMain(unittest.TestCase):
                 [{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}]]
         row = [1, 0, None]
         output = forward_propagate(network, row)
-        print()
-        print('output:', output)
+        self.assertListEqual(output, [0.6629970129852887, 0.7253160725279748])
 
     def test_backward_propagate_error(self):
         # test backpropagation of error
         print("Testing Backpropagate:")
-        network = [[{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
-                [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095]}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763]}]]
+        network = [
+                    [{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
+                    [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095]}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763]}]
+                ]
         expected = [0, 1]
         backward_propagate_error(network, expected)
-        for layer in network:
-            print(layer)
+
+        expected_error_network = [
+                                    [{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614], 'delta': 0.0005348048046610517}],
+                                    [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095], 'delta': 0.14619064683582808}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763], 'delta': -0.0771723774346327}]
+                                ]
+        # print("\nERROR NETWORK:")
+        # for layer in network:
+        #     print(layer)
+        self.assertListEqual(network, expected_error_network)
 
     def test_train_network(self):
         # Test training backprop algorithm
@@ -81,8 +89,11 @@ class TestMain(unittest.TestCase):
         n_outputs = len(set([row[-1] for row in self.dataset]))
         network = initialize_network(n_inputs, 2, n_outputs)
         train_network(network, self.dataset, 0.5, 20, n_outputs)
-        for layer in network:
-            print(layer)
+        expected_network = [
+            [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
+            [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
+        ]
+        self.assertListEqual(network, expected_network)
 
     def test_predict(self):
         # Test making predictions with the network
