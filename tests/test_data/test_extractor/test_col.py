@@ -1,11 +1,11 @@
 import unittest
 
-from deepton.data.extractor import Dataset
+from deepton.data.extractor import Extract
 from deepton.data.extractor import Col
 
 class TestCol(unittest.TestCase):
     def test_getitem(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         col = Col(dataset)
         col0 = [
             '2.7810836',
@@ -22,7 +22,7 @@ class TestCol(unittest.TestCase):
         self.assertListEqual(col[0], col0)
 
     def test_setitem(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         col = Col(dataset)
         col_to_set = [
             '2.7810836',

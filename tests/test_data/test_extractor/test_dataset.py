@@ -1,7 +1,7 @@
 import unittest
-from deepton.data.extractor import Dataset
+from deepton.data.extractor import Extract
 
-class TestDataset(unittest.TestCase):
+class TestExtract(unittest.TestCase):
     def setUp(self) -> None:        
         self.data = [['2.7810836','2.550537003','0'],
             ['1.465489372','2.362125076','0'],
@@ -15,26 +15,26 @@ class TestDataset(unittest.TestCase):
             ['7.673756466','3.508563011','1']]
 
     def test_init(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         self.assertListEqual(dataset.data, self.data)
 
     def test_getitem(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         elm = dataset[0]
         self.assertListEqual(elm, self.data[0])
 
     def test_iter(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         for elm in dataset:
             pass
         self.assertListEqual(elm, self.data[-1])
 
     def test_len(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         self.assertEqual(len(dataset), len(self.data))
 
     def test_col(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         col0 = [
             '2.7810836',
             '1.465489372',

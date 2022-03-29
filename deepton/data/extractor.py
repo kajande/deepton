@@ -12,7 +12,7 @@ class Col:
 			self.dataset[j][i] = value[j]
 
 
-class Dataset: 
+class Extract: 
 	def __init__(self, filename):
 		self.data = self._load_csv(filename)
 		self.col = Col(self)

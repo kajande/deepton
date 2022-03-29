@@ -1,7 +1,7 @@
 from random import seed
 from deepton.main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
 from deepton.main import dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
-from deepton.data.extractor import Dataset
+from deepton.data.extractor import Extract
 from deepton.data.transformer import ToFloat, ToInt
 import unittest
 
@@ -13,7 +13,7 @@ class TestMain(unittest.TestCase):
         # load and prepare data
         filename = 'example.csv'
         # filename = 'seeds_dataset.csv'
-        self.dataset = Dataset(filename)
+        self.dataset = Extract(filename)
         to_float = ToFloat()
         for i in range(len(self.dataset[0])-1):
             self.dataset.col[i] = to_float(self.dataset.col[i])

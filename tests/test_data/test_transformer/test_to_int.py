@@ -1,6 +1,6 @@
 import unittest
 
-from deepton.data.extractor import Dataset
+from deepton.data.extractor import Extract
 from deepton.data.transformer import ToInt
 
 class TestToInt(unittest.TestCase):
@@ -18,7 +18,7 @@ class TestToInt(unittest.TestCase):
 
     # @unittest.skip("Testing to_float")
     def test_to_int(self):
-        dataset = Dataset('example.csv')
+        dataset = Extract('example.csv')
         self.assertIsInstance(dataset.col[-1][0], str)
         to_int = ToInt().fit(dataset.col[-1])
         dataset.col[-1] = to_int(dataset.col[-1])
