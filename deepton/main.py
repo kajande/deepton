@@ -4,11 +4,6 @@ from random import randrange
 from random import random
 from math import exp
 
-# Find the min and max values for each column
-def dataset_minmax(dataset):
-	minmax = list()
-	stats = [[min(column), max(column)] for column in zip(*dataset)]
-	return stats
 
 # Rescale dataset columns to the range 0-1
 def normalize_dataset(dataset, minmax):

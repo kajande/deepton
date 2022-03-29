@@ -1,6 +1,6 @@
 from random import seed
 from deepton.main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
-from deepton.main import dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
+from deepton.main import normalize_dataset, back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform
 import unittest
@@ -73,7 +73,7 @@ class TestMain(unittest.TestCase):
         print("Testing back_propagation algorithm:")
         seed(1)
         # normalize input variables
-        minmax = dataset_minmax(self.dataset)
+        minmax = self.dataset.minmax()
         normalize_dataset(self.dataset, minmax)
         # evaluate algorithm
         n_folds = 5

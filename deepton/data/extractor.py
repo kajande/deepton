@@ -39,3 +39,9 @@ class Extract:
 
 	def __iter__(self):
 		return iter(self.data)
+
+	# Find the min and max values for each column
+	def minmax(self):
+		minmax = list()
+		stats = [[min(column), max(column)] for column in zip(*self.data)]
+		return stats
