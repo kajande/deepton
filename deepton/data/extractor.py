@@ -4,12 +4,12 @@ class Col:
 	def __init__(self, dataset):
 		self.dataset = dataset
 
-	def __getitem__(self, i):
-		return list(map(lambda x: x[i], self.dataset))
+	def __getitem__(self, j):
+		return list(map(lambda x: x[j], self.dataset))
 
-	def __setitem__(self, i, value):
-		for j in range(len(value)):
-			self.dataset[j][i] = value[j]
+	def __setitem__(self, j, value):
+		for i in range(len(value)):
+			self.dataset[i][j] = value[i]
 
 
 class Extract: 
