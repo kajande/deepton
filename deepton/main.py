@@ -5,12 +5,6 @@ from random import random
 from math import exp
 
 
-# Rescale dataset columns to the range 0-1
-def normalize_dataset(dataset, minmax):
-	for row in dataset:
-		for i in range(len(row)-1):
-			row[i] = (row[i] - minmax[i][0]) / (minmax[i][1] - minmax[i][0])
-
 # Split a dataset into k folds
 def cross_validation_split(dataset, n_folds):
 	dataset_split = list()

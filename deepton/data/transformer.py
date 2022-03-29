@@ -24,3 +24,12 @@ class IntTransform:
 
 	def __call__(self, column):
 		return [self.lookup[row] for row in column]
+
+
+# Rescale dataset columns to the range 0-1
+class NormalizeTransform:
+	def __call__(self, dataset, minmax):
+		for row in dataset:
+			for i in range(len(row)-1):
+				row[i] = (row[i] - minmax[i][0]) / (minmax[i][1] - minmax[i][0])
+		return dataset
