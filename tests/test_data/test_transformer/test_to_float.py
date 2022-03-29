@@ -1,9 +1,9 @@
 import unittest
 
 from deepton.data.extractor import Extract
-from deepton.data.transformer import ToFloat
+from deepton.data.transformer import FloatTransform
 
-class TestToFloat(unittest.TestCase):
+class TestFloatTransform(unittest.TestCase):
     def setUp(self) -> None:
         self.data = [['2.7810836','2.550537003','0'],
             ['1.465489372','2.362125076','0'],
@@ -18,7 +18,7 @@ class TestToFloat(unittest.TestCase):
 
     def test_to_float(self):
         dataset = Extract('example.csv')
-        to_float = ToFloat()
+        to_float = FloatTransform()
         self.assertIsInstance(dataset.col[1][0], str)
         dataset.col[1] = to_float(dataset.col[1])
         self.assertIsInstance(dataset.col[1][0], float)

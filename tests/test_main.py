@@ -2,23 +2,23 @@ from random import seed
 from deepton.main import initialize_network, forward_propagate, backward_propagate_error, train_network, predict
 from deepton.main import dataset_minmax, normalize_dataset, back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
-from deepton.data.transformer import ToFloat, ToInt
+from deepton.data.transformer import FloatTransform, IntTransform
 import unittest
 
 
 
-# @unittest.skip("Testing ToInt")
+# @unittest.skip("Testing IntTransform")
 class TestMain(unittest.TestCase):
     def setUp(self) -> None:
         # load and prepare data
         filename = 'example.csv'
         # filename = 'seeds_dataset.csv'
         self.dataset = Extract(filename)
-        to_float = ToFloat()
+        to_float = FloatTransform()
         for i in range(len(self.dataset[0])-1):
             self.dataset.col[i] = to_float(self.dataset.col[i])
         # convert class column to integers
-        to_int = ToInt().fit(self.dataset.col[-1])
+        to_int = IntTransform().fit(self.dataset.col[-1])
         self.dataset.col[-1] = to_int(self.dataset.col[-1])
 
 

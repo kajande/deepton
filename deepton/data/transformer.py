@@ -1,4 +1,4 @@
-class ToFloat:
+class FloatTransform:
 	# Convert string column to float
 	def __call__(self, column):
 		# for row in column:
@@ -7,7 +7,7 @@ class ToFloat:
 			# row[self.column] = float(row[self.column].strip())
 		return column
 
-class ToInt:
+class IntTransform:
 	# Convert string column to integer
 	def __init__(self, lookup=None):
 		if lookup:
