@@ -27,7 +27,7 @@ class TestTrainer(unittest.TestCase):
         n_inputs = len(self.dataset[0]) - 1
         n_outputs = len(set([row[-1] for row in self.dataset]))
         network = Network(n_inputs, 2, n_outputs)
-        trainer = Trainer(self.dataset, 0.5, 20, n_outputs)
+        trainer = Trainer(0.5, 20, n_outputs, self.dataset)
         network.learn(trainer)
         expected_layers = [
             [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],

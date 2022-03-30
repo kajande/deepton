@@ -36,10 +36,7 @@ def back_propagation(train, test, l_rate, n_epoch, n_hidden):
 	n_inputs = len(train[0]) - 1
 	n_outputs = len(set([row[-1] for row in train]))
 	network = Network(n_inputs, n_hidden, n_outputs)
-	trainer = Trainer(train, l_rate, n_epoch, n_outputs)
+	trainer = Trainer(l_rate, n_epoch, n_outputs, train, test)
 	network.learn(trainer)
-	predictions = list()
-	for row in test:
-		prediction = network.predict(row)
-		predictions.append(prediction)
-	return(predictions)
+	predictions = trainer.test(network)
+	return predictions

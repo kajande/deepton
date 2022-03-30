@@ -5,8 +5,9 @@ from deepton.model.network import Network
 
 class Trainer:
     # Train a network for a fixed number of epochs
-    def __init__(self, train, l_rate, n_epoch, n_outputs):
+    def __init__(self, l_rate, n_epoch, n_outputs, train, test=None):
         self._train = train
+        self._test = test
         self._n_epoch = n_epoch
         self._n_outputs = n_outputs
         self._l_rate = l_rate
@@ -19,3 +20,12 @@ class Trainer:
                 expected[row[-1]] = 1
                 network.backward_propagate_error(expected)
                 network.update_weights(row, self._l_rate)
+
+    def test(self, network):
+        if not self._test:
+            raise Exception("Test data is not provided to Trainer object")
+        predictions = list()
+        for row in self._test:
+            prediction = network.predict(row)
+            predictions.append(prediction)
+        return(predictions)
