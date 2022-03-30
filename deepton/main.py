@@ -30,17 +30,6 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 	return scores
 
 
-# Update network weights with error
-def update_weights(network, row, l_rate):
-	for i in range(len(network)):
-		inputs = row[:-1]
-		if i != 0:
-			inputs = [neuron['output'] for neuron in network[i - 1]]
-		for neuron in network[i]:
-			for j in range(len(inputs)):
-				neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
-			neuron['weights'][-1] -= l_rate * neuron['delta']
-
 # Train a network for a fixed number of epochs
 def train_network(network, train, l_rate, n_epoch, n_outputs):
 	for epoch in range(n_epoch):
@@ -49,7 +38,7 @@ def train_network(network, train, l_rate, n_epoch, n_outputs):
 			expected = [0 for i in range(n_outputs)]
 			expected[row[-1]] = 1
 			network.backward_propagate_error(expected)
-			update_weights(network, row, l_rate)
+			network.update_weights(row, l_rate)
 
 # Make a prediction with a network
 def predict(network, row):

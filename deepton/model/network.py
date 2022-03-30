@@ -82,3 +82,14 @@ class Network:
             for j in range(len(layer)):
                 neuron = layer[j]
                 neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])
+
+    # Update network weights with error
+    def update_weights(self, row, l_rate):
+        for i in range(len(self)):
+            inputs = row[:-1]
+            if i != 0:
+                inputs = [neuron['output'] for neuron in self[i - 1]]
+            for neuron in self[i]:
+                for j in range(len(inputs)):
+                    neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
+                neuron['weights'][-1] -= l_rate * neuron['delta']
