@@ -1,7 +1,6 @@
 # Backprop on the Seeds Dataset
-from math import exp
 from deepton.data.loader import cross_validation_split
-from deepton.model.network import Network
+from deepton.model.network import Network, forward_propagate
 
 # Calculate accuracy percentage
 def accuracy_metric(actual, predicted):
@@ -30,28 +29,6 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 		scores.append(accuracy)
 	return scores
 
-# Calculate neuron activation for an input
-def activate(weights, inputs):
-	activation = weights[-1]
-	for i in range(len(weights)-1):
-		activation += weights[i] * inputs[i]
-	return activation
-
-# Transfer neuron activation
-def transfer(activation):
-	return 1.0 / (1.0 + exp(-activation))
-
-# Forward propagate input to a network output
-def forward_propagate(network, row):
-	inputs = row
-	for layer in network:
-		new_inputs = []
-		for neuron in layer:
-			activation = activate(neuron['weights'], inputs)
-			neuron['output'] = transfer(activation)
-			new_inputs.append(neuron['output'])
-		inputs = new_inputs
-	return inputs
 
 # Calculate the derivative of an neuron output
 def transfer_derivative(output):

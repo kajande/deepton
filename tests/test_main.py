@@ -2,11 +2,11 @@ from locale import normalize
 import unittest
 
 from random import seed
-from deepton.main import forward_propagate, backward_propagate_error, train_network, predict
+from deepton.main import backward_propagate_error, train_network, predict
 from deepton.main import back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
-from deepton.model.network import Network
+from deepton.model.network import Network, forward_propagate
 
 
 
