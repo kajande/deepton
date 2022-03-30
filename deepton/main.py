@@ -1,5 +1,5 @@
 # Backprop on the Seeds Dataset
-from deepton.data.loader import cross_validation_split
+from deepton.data.loader import CrossValidationSplitLoader
 from deepton.model.network import Network
 from deepton.model.trainer import Trainer
 
@@ -13,19 +13,12 @@ def accuracy_metric(actual, predicted):
 
 # Evaluate an algorithm using a cross validation split
 def evaluate_algorithm(dataset, algorithm, n_folds, *args):
-	folds = cross_validation_split(dataset, n_folds)
+	cross_validation_split = CrossValidationSplitLoader(dataset, n_folds)
+	folds = cross_validation_split()
 	scores = list()
-	for fold in folds:
-		train_set = list(folds)
-		train_set.remove(fold)
-		train_set = sum(train_set, [])
-		test_set = list()
-		for row in fold:
-			row_copy = list(row)
-			test_set.append(row_copy)
-			row_copy[-1] = None
+	for train_set, test_set, validation_set in cross_validation_split:
 		predicted = algorithm(train_set, test_set, *args)
-		actual = [row[-1] for row in fold]
+		actual = [row[-1] for row in validation_set]
 		accuracy = accuracy_metric(actual, predicted)
 		scores.append(accuracy)
 	return scores
