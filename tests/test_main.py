@@ -1,10 +1,12 @@
 from locale import normalize
+import unittest
+
 from random import seed
-from deepton.main import Network, forward_propagate, backward_propagate_error, train_network, predict
+from deepton.main import forward_propagate, backward_propagate_error, train_network, predict
 from deepton.main import back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
-import unittest
+from deepton.model.network import Network
 
 
 
@@ -22,17 +24,6 @@ class TestMain(unittest.TestCase):
         to_int = IntTransform().fit(self.dataset.col[-1])
         self.dataset.col[-1] = to_int(self.dataset.col[-1])
 
-
-    def test_initialize_network(self):
-        seed(1)
-        network = Network(2, 1, 2)
-        expected_layers = [
-            [{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
-            [{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}]
-        ]
-        self.assertEqual(network.layers, expected_layers)
-        # for layer in layers:
-        #     print('layer:', layer)
 
     def test_forward_propagate(self):
         # test forward propagation

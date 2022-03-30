@@ -1,8 +1,7 @@
 # Backprop on the Seeds Dataset
-from random import seed
-from random import random
 from math import exp
 from deepton.data.loader import cross_validation_split
+from deepton.model.network import Network
 
 # Calculate accuracy percentage
 def accuracy_metric(actual, predicted):
@@ -97,15 +96,6 @@ def train_network(network, train, l_rate, n_epoch, n_outputs):
 			expected[row[-1]] = 1
 			backward_propagate_error(network, expected)
 			update_weights(network, row, l_rate)
-
-class Network:
-	# Initialize a network
-	def __init__(self, n_inputs, n_hidden, n_outputs):
-		self.layers = list()
-		hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
-		self.layers.append(hidden_layer)
-		output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_outputs)]
-		self.layers.append(output_layer)
 
 # Make a prediction with a network
 def predict(network, row):
