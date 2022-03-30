@@ -1,7 +1,7 @@
 import unittest
 
 from random import seed
-from deepton.main import backward_propagate_error, train_network, predict
+from deepton.main import train_network, predict
 from deepton.main import back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
@@ -23,25 +23,6 @@ class TestMain(unittest.TestCase):
         to_int = IntTransform().fit(self.dataset.col[-1])
         self.dataset.col[-1] = to_int(self.dataset.col[-1])
 
-
-    def test_backward_propagate_error(self):
-        # test backpropagation of error
-        # print("Testing Backpropagate:")
-        layers = [
-                    [{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
-                    [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095]}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763]}]
-                ]
-        expected = [0, 1]
-        backward_propagate_error(layers, expected)
-
-        expected_error_layers = [
-                                    [{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614], 'delta': 0.0005348048046610517}],
-                                    [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095], 'delta': 0.14619064683582808}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763], 'delta': -0.0771723774346327}]
-                                ]
-        # print("\nERROR NETWORK:")
-        # for layer in layers:
-        #     print(layer)
-        self.assertListEqual(layers, expected_error_layers)
 
     def test_train_network(self):
         # Test training backprop algorithm

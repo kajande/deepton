@@ -13,6 +13,10 @@ def activate(weights, inputs):
 def transfer(activation):
 	return 1.0 / (1.0 + exp(-activation))
 
+# Calculate the derivative of an neuron output
+def transfer_derivative(output):
+	return output * (1.0 - output)
+
 class Network:
     # Initialize a network
     def __init__(self, n_inputs=None, n_hidden=None, n_outputs=None, layers=None):
@@ -59,3 +63,22 @@ class Network:
             inputs = new_inputs
         return inputs
 
+
+    # Backpropagate error and store in neurons
+    def backward_propagate_error(self, expected):
+        for i in reversed(range(len(self))):
+            layer = self[i]
+            errors = list()
+            if i != len(self)-1:
+                for j in range(len(layer)):
+                    error = 0.0
+                    for neuron in self[i + 1]:
+                        error += (neuron['weights'][j] * neuron['delta'])
+                    errors.append(error)
+            else:
+                for j in range(len(layer)):
+                    neuron = layer[j]
+                    errors.append(neuron['output'] - expected[j])
+            for j in range(len(layer)):
+                neuron = layer[j]
+                neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])

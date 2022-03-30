@@ -30,29 +30,6 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 	return scores
 
 
-# Calculate the derivative of an neuron output
-def transfer_derivative(output):
-	return output * (1.0 - output)
-
-# Backpropagate error and store in neurons
-def backward_propagate_error(network, expected):
-	for i in reversed(range(len(network))):
-		layer = network[i]
-		errors = list()
-		if i != len(network)-1:
-			for j in range(len(layer)):
-				error = 0.0
-				for neuron in network[i + 1]:
-					error += (neuron['weights'][j] * neuron['delta'])
-				errors.append(error)
-		else:
-			for j in range(len(layer)):
-				neuron = layer[j]
-				errors.append(neuron['output'] - expected[j])
-		for j in range(len(layer)):
-			neuron = layer[j]
-			neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])
-
 # Update network weights with error
 def update_weights(network, row, l_rate):
 	for i in range(len(network)):
@@ -71,7 +48,7 @@ def train_network(network, train, l_rate, n_epoch, n_outputs):
 			outputs = network.forward_propagate(row)
 			expected = [0 for i in range(n_outputs)]
 			expected[row[-1]] = 1
-			backward_propagate_error(network, expected)
+			network.backward_propagate_error(expected)
 			update_weights(network, row, l_rate)
 
 # Make a prediction with a network
