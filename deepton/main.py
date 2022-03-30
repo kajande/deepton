@@ -1,6 +1,7 @@
 # Backprop on the Seeds Dataset
 from deepton.data.loader import cross_validation_split
 from deepton.model.network import Network
+from deepton.model.trainer import Trainer
 
 # Calculate accuracy percentage
 def accuracy_metric(actual, predicted):
@@ -30,23 +31,13 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 	return scores
 
 
-# Train a network for a fixed number of epochs
-def train_network(network, train, l_rate, n_epoch, n_outputs):
-	for epoch in range(n_epoch):
-		for row in train:
-			outputs = network.forward_propagate(row)
-			expected = [0 for i in range(n_outputs)]
-			expected[row[-1]] = 1
-			network.backward_propagate_error(expected)
-			network.update_weights(row, l_rate)
-
-
 # Backpropagation Algorithm With Stochastic Gradient Descent
 def back_propagation(train, test, l_rate, n_epoch, n_hidden):
 	n_inputs = len(train[0]) - 1
 	n_outputs = len(set([row[-1] for row in train]))
 	network = Network(n_inputs, n_hidden, n_outputs)
-	train_network(network, train, l_rate, n_epoch, n_outputs)
+	trainer = Trainer(train, l_rate, n_epoch, n_outputs)
+	network.learn(trainer)
 	predictions = list()
 	for row in test:
 		prediction = network.predict(row)

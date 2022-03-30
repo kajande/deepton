@@ -1,5 +1,7 @@
 import unittest
 from random import seed
+from deepton.data.extractor import Extract
+from deepton.data.transformer import FloatTransform, IntTransform
 from deepton.model import network
 
 from deepton.model.network import Network
@@ -78,6 +80,17 @@ class TestBackwardPropagateError(unittest.TestCase):
         self.assertEqual(network, expected_error_network)
 
 class TestPredict(unittest.TestCase):
+    def setUp(self) -> None:
+        # load and prepare data
+        filename = 'example.csv'
+        # filename = 'seeds_dataset.csv'
+        self.dataset = Extract(filename)
+        to_float = FloatTransform()
+        for i in range(len(self.dataset[0])-1):
+            self.dataset.col[i] = to_float(self.dataset.col[i])
+        # convert class column to integers
+        to_int = IntTransform().fit(self.dataset.col[-1])
+        self.dataset.col[-1] = to_int(self.dataset.col[-1])
     def test_predict(self):
         # Test making predictions with the network
         # print("Testing predict:")
