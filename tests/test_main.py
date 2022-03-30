@@ -1,7 +1,7 @@
 import unittest
 
 from random import seed
-from deepton.main import train_network, predict
+from deepton.main import train_network
 from deepton.main import back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
@@ -37,18 +37,6 @@ class TestMain(unittest.TestCase):
             [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
         ]
         self.assertListEqual(network.layers, expected_layers)
-
-    def test_predict(self):
-        # Test making predictions with the network
-        # print("Testing predict:")
-
-        layers = [[{'weights': [-1.482313569067226, 1.8308790073202204, 1.078381922048799]}, {'weights': [0.23244990332399884, 0.3621998343835864, 0.40289821191094327]}],
-            [{'weights': [2.5001872433501404, 0.7887233511355132, -1.1026649757805829]}, {'weights': [-2.429350576245497, 0.8357651039198697, 1.0699217181280656]}]]
-        network = Network(layers=layers)
-        for row in self.dataset:
-            prediction = predict(network, row)
-            self.assertEqual(prediction, row[-1])
-            # print('Expected=%d, Got=%d' % (row[-1], prediction))
 
     def test_back_propagation(self):
         # Test Backprop on Seeds dataset

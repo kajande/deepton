@@ -93,3 +93,8 @@ class Network:
                 for j in range(len(inputs)):
                     neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
                 neuron['weights'][-1] -= l_rate * neuron['delta']
+
+    # Make a prediction with a network
+    def predict(self, row):
+        outputs = self.forward_propagate(row)
+        return outputs.index(max(outputs))

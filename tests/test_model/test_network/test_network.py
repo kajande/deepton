@@ -77,6 +77,19 @@ class TestBackwardPropagateError(unittest.TestCase):
         #     print(layer)
         self.assertEqual(network, expected_error_network)
 
+class TestPredict(unittest.TestCase):
+    def test_predict(self):
+        # Test making predictions with the network
+        # print("Testing predict:")
+
+        layers = [[{'weights': [-1.482313569067226, 1.8308790073202204, 1.078381922048799]}, {'weights': [0.23244990332399884, 0.3621998343835864, 0.40289821191094327]}],
+            [{'weights': [2.5001872433501404, 0.7887233511355132, -1.1026649757805829]}, {'weights': [-2.429350576245497, 0.8357651039198697, 1.0699217181280656]}]]
+        network = Network(layers=layers)
+        for row in self.dataset:
+            prediction = network.predict(row)
+            self.assertEqual(prediction, row[-1])
+            # print('Expected=%d, Got=%d' % (row[-1], prediction))
+
 
 if __name__ == '__main__':
     unittest.main()

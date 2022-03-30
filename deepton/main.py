@@ -40,10 +40,6 @@ def train_network(network, train, l_rate, n_epoch, n_outputs):
 			network.backward_propagate_error(expected)
 			network.update_weights(row, l_rate)
 
-# Make a prediction with a network
-def predict(network, row):
-	outputs = network.forward_propagate(row)
-	return outputs.index(max(outputs))
 
 # Backpropagation Algorithm With Stochastic Gradient Descent
 def back_propagation(train, test, l_rate, n_epoch, n_hidden):
@@ -53,6 +49,6 @@ def back_propagation(train, test, l_rate, n_epoch, n_hidden):
 	train_network(network, train, l_rate, n_epoch, n_outputs)
 	predictions = list()
 	for row in test:
-		prediction = predict(network, row)
+		prediction = network.predict(row)
 		predictions.append(prediction)
 	return(predictions)
