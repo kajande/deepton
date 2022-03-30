@@ -98,14 +98,14 @@ def train_network(network, train, l_rate, n_epoch, n_outputs):
 			backward_propagate_error(network, expected)
 			update_weights(network, row, l_rate)
 
-# Initialize a network
-def initialize_network(n_inputs, n_hidden, n_outputs):
-	network = list()
-	hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
-	network.append(hidden_layer)
-	output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_outputs)]
-	network.append(output_layer)
-	return network
+class Network:
+	# Initialize a network
+	def __init__(self, n_inputs, n_hidden, n_outputs):
+		self.layers = list()
+		hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
+		self.layers.append(hidden_layer)
+		output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_outputs)]
+		self.layers.append(output_layer)
 
 # Make a prediction with a network
 def predict(network, row):
@@ -116,10 +116,10 @@ def predict(network, row):
 def back_propagation(train, test, l_rate, n_epoch, n_hidden):
 	n_inputs = len(train[0]) - 1
 	n_outputs = len(set([row[-1] for row in train]))
-	network = initialize_network(n_inputs, n_hidden, n_outputs)
-	train_network(network, train, l_rate, n_epoch, n_outputs)
+	network = Network(n_inputs, n_hidden, n_outputs)
+	train_network(network.layers, train, l_rate, n_epoch, n_outputs)
 	predictions = list()
 	for row in test:
-		prediction = predict(network, row)
+		prediction = predict(network.layers, row)
 		predictions.append(prediction)
 	return(predictions)
