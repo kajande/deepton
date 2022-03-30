@@ -41,14 +41,21 @@ class Network:
     def __eq__(self, other):
         return self.layers == other.layers
 
-# Forward propagate input to a network output
-def forward_propagate(network, row):
-    inputs = row
-    for layer in network:
-        new_inputs = []
-        for neuron in layer:
-            activation = activate(neuron['weights'], inputs)
-            neuron['output'] = transfer(activation)
-            new_inputs.append(neuron['output'])
-        inputs = new_inputs
-    return inputs
+    def __len__(self):
+        return len(self._layers)
+
+    def __getitem__(self, i):
+        return self._layers[i]
+
+    # Forward propagate input to a network output
+    def forward_propagate(self, row):
+        inputs = row
+        for layer in self._layers:
+            new_inputs = []
+            for neuron in layer:
+                activation = activate(neuron['weights'], inputs)
+                neuron['output'] = transfer(activation)
+                new_inputs.append(neuron['output'])
+            inputs = new_inputs
+        return inputs
+

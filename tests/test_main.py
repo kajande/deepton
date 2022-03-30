@@ -1,4 +1,3 @@
-from locale import normalize
 import unittest
 
 from random import seed
@@ -6,7 +5,7 @@ from deepton.main import backward_propagate_error, train_network, predict
 from deepton.main import back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
-from deepton.model.network import Network, forward_propagate
+from deepton.model.network import Network
 
 
 
@@ -24,14 +23,6 @@ class TestMain(unittest.TestCase):
         to_int = IntTransform().fit(self.dataset.col[-1])
         self.dataset.col[-1] = to_int(self.dataset.col[-1])
 
-
-    def test_forward_propagate(self):
-        # test forward propagation
-        layers = [[{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
-                [{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}]]
-        row = [1, 0, None]
-        output = forward_propagate(layers, row)
-        self.assertListEqual(output, [0.6629970129852887, 0.7253160725279748])
 
     def test_backward_propagate_error(self):
         # test backpropagation of error
@@ -59,7 +50,7 @@ class TestMain(unittest.TestCase):
         n_inputs = len(self.dataset[0]) - 1
         n_outputs = len(set([row[-1] for row in self.dataset]))
         network = Network(n_inputs, 2, n_outputs)
-        train_network(network.layers, self.dataset, 0.5, 20, n_outputs)
+        train_network(network, self.dataset, 0.5, 20, n_outputs)
         expected_layers = [
             [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
             [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
@@ -72,8 +63,9 @@ class TestMain(unittest.TestCase):
 
         layers = [[{'weights': [-1.482313569067226, 1.8308790073202204, 1.078381922048799]}, {'weights': [0.23244990332399884, 0.3621998343835864, 0.40289821191094327]}],
             [{'weights': [2.5001872433501404, 0.7887233511355132, -1.1026649757805829]}, {'weights': [-2.429350576245497, 0.8357651039198697, 1.0699217181280656]}]]
+        network = Network(layers=layers)
         for row in self.dataset:
-            prediction = predict(layers, row)
+            prediction = predict(network, row)
             self.assertEqual(prediction, row[-1])
             # print('Expected=%d, Got=%d' % (row[-1], prediction))
 
