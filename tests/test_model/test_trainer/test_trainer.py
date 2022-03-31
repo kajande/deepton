@@ -1,10 +1,11 @@
 import unittest
 from random import seed
+from deepton.data.loader import CrossValidationSplitLoader
 
 from deepton.model.network import Network
 from deepton.model.trainer import Trainer
 from deepton.data.extractor import Extract
-from deepton.data.transformer import FloatTransform, IntTransform
+from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 
 class TestTrainer(unittest.TestCase):
     def setUp(self) -> None:
@@ -36,3 +37,27 @@ class TestTrainer(unittest.TestCase):
             [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
         ]
         self.assertListEqual(network.layers, expected_layers)
+
+class TestEvaluate(TestTrainer):
+    def test_evaluate(self):
+        # Test Backprop on Seeds dataset
+        # print("Testing back_propagation algorithm:")
+        seed(1)
+        # normalize input variables
+        minmax = self.dataset.minmax()
+        normalize = NormalizeTransform()
+        self.dataset = normalize(self.dataset, minmax)
+        n_folds = 5
+        loader = CrossValidationSplitLoader(self.dataset, n_folds)
+        # evaluate algorithm
+        l_rate = 0.3
+        n_epoch = 500
+        n_hidden = 5
+        trainer = Trainer(l_rate, n_epoch, n_hidden)
+        scores = trainer.evaluate(loader)
+        # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
+        # print('Scores: %s' % scores)
+        self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])
+        mean_accuracy = sum(scores)/float(len(scores))
+        # print('Mean Accuracy: %.3f%%' % (mean_accuracy))
+        self.assertEqual(mean_accuracy, 100.000)
