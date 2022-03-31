@@ -19,24 +19,26 @@ def transfer_derivative(output):
 
 class Network:
     # Initialize a network
-    def __init__(self, n_inputs=None, n_hidden=None, n_outputs=None, layers=None):
+    def __init__(self, n_inputs=None, n_outputs=None, layers=None):
         # if layers:
         #     self.layers = layers
         # else:
         #     self.layers = self.from_layers(n_inputs, n_hidden, n_outputs)
-
-        if not layers:
-            layers = self.from_layers(n_inputs, n_hidden, n_outputs)
+        self.n_inputs = n_inputs
+        self.n_outputs = n_outputs
         self._layers = layers
 
-    @staticmethod
-    def from_layers(n_inputs, n_hidden, n_outputs):
+        # if not layers:
+        #     layers = self.from_layers(n_inputs, n_hidden, n_outputs)
+        # self._layers = layers
+
+    def init(self, n_hidden):
         layers = list()
-        hidden_layer = [{'weights':[random() for i in range(n_inputs + 1)]} for i in range(n_hidden)]
+        hidden_layer = [{'weights':[random() for i in range(self.n_inputs + 1)]} for i in range(n_hidden)]
         layers.append(hidden_layer)
-        output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(n_outputs)]
+        output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(self.n_outputs)]
         layers.append(output_layer)
-        return layers
+        self._layers = layers
 
     @property
     def layers(self):
@@ -94,15 +96,18 @@ class Network:
                     neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
                 neuron['weights'][-1] -= l_rate * neuron['delta']
 
-    def learn(self, trainer):
+    def learn(self, train_data, trainer):
         # trainer.train(self)
+        self.init(trainer.n_hidden) # later refactor to `trainer.initializer` instead
         for epoch in range(trainer.n_epoch):
-            for row in trainer.train_data:
+            for row in train_data:
                 outputs = self.forward_propagate(row)
-                expected = [0 for i in range(trainer.n_outputs)]
+                expected = [0 for i in range(self.n_outputs)]
+                # print(f"\n\nn_outputs: {trainer.n_outputs}\n\n")
                 expected[row[-1]] = 1
                 self.backward_propagate_error(expected)
                 self.update_weights(row, trainer.l_rate)
+        # update here the `trainer.initializer` parameters
 
     # Make a prediction with a network
     def predict(self, row):

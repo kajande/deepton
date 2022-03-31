@@ -1,10 +1,10 @@
 import unittest
 
 from random import seed
-from deepton.main import back_propagation, evaluate_algorithm
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 from deepton.model.network import Network
+from deepton.model.trainer import Trainer
 
 
 
@@ -35,7 +35,9 @@ class TestMain(unittest.TestCase):
         l_rate = 0.3
         n_epoch = 500
         n_hidden = 5
-        scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
+        trainer = Trainer(l_rate, n_epoch, n_hidden)
+        scores = trainer.evaluate(self.dataset, n_folds)
+        # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
         # print('Scores: %s' % scores)
         self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])
         mean_accuracy = sum(scores)/float(len(scores))

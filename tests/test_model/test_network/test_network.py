@@ -9,7 +9,8 @@ from deepton.model.network import Network
 class TestInit(unittest.TestCase):
     def test_n_inputs_n_hidden_n_outputs(self):        
         seed(1)
-        network = Network(2, 1, 2)
+        network = Network(2, 2)
+        network.init(1)
         expected_layers = [
             [{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
             [{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}]

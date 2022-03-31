@@ -26,9 +26,11 @@ class TestTrainer(unittest.TestCase):
         seed(1)
         n_inputs = len(self.dataset[0]) - 1
         n_outputs = len(set([row[-1] for row in self.dataset]))
-        network = Network(n_inputs, 2, n_outputs)
-        trainer = Trainer(0.5, 20, n_outputs, self.dataset)
-        network.learn(trainer)
+        # print(f"\n\nn_outputs: {n_outputs}\n\n")
+        n_hidden = 2
+        trainer = Trainer(0.5, 20, n_hidden)
+        network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
+        network.learn(self.dataset, trainer)
         expected_layers = [
             [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
             [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
