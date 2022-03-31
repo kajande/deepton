@@ -20,12 +20,3 @@ class Trainer:
                 expected[row[-1]] = 1
                 network.backward_propagate_error(expected)
                 network.update_weights(row, self._l_rate)
-
-    def test(self, network):
-        if not self._test:
-            raise Exception("Test data is not provided to Trainer object")
-        predictions = list()
-        for row in self._test:
-            prediction = network.predict(row)
-            predictions.append(prediction)
-        return(predictions)

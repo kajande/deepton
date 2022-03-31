@@ -14,7 +14,6 @@ def accuracy_metric(actual, predicted):
 # Evaluate an algorithm using a cross validation split
 def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 	cross_validation_split = CrossValidationSplitLoader(dataset, n_folds)
-	folds = cross_validation_split()
 	scores = list()
 	for train_set, test_set, validation_set in cross_validation_split:
 		predicted = algorithm(train_set, test_set, *args)
@@ -28,8 +27,8 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 def back_propagation(train, test, l_rate, n_epoch, n_hidden):
 	n_inputs = len(train[0]) - 1
 	n_outputs = len(set([row[-1] for row in train]))
-	network = Network(n_inputs, n_hidden, n_outputs)
 	trainer = Trainer(l_rate, n_epoch, n_outputs, train, test)
+	network = Network(n_inputs, n_hidden, n_outputs)
 	network.learn(trainer)
-	predictions = trainer.test(network)
+	predictions = network.test(test)
 	return predictions

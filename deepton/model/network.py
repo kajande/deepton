@@ -101,3 +101,11 @@ class Network:
     def predict(self, row):
         outputs = self.forward_propagate(row)
         return outputs.index(max(outputs))
+
+
+    def test(self, test):
+        predictions = list()
+        for row in test:
+            prediction = self.predict(row)
+            predictions.append(prediction)
+        return(predictions)
