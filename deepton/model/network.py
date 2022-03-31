@@ -95,7 +95,14 @@ class Network:
                 neuron['weights'][-1] -= l_rate * neuron['delta']
 
     def learn(self, trainer):
-        trainer.train(self)
+        # trainer.train(self)
+        for epoch in range(trainer.n_epoch):
+            for row in trainer.train_data:
+                outputs = self.forward_propagate(row)
+                expected = [0 for i in range(trainer.n_outputs)]
+                expected[row[-1]] = 1
+                self.backward_propagate_error(expected)
+                self.update_weights(row, trainer.l_rate)
 
     # Make a prediction with a network
     def predict(self, row):
