@@ -14,25 +14,31 @@ class TestExtract(unittest.TestCase):
             ['8.675418651','-0.242068655','1'],
             ['7.673756466','3.508563011','1']]
 
+
+class TestInit(TestExtract):
     def test_init(self):
         dataset = Extract('example.csv')
         self.assertListEqual(dataset.data, self.data)
 
+class TestGetim(TestExtract):
     def test_getitem(self):
         dataset = Extract('example.csv')
         elm = dataset[0]
         self.assertListEqual(elm, self.data[0])
 
+class TestIter(TestExtract):
     def test_iter(self):
         dataset = Extract('example.csv')
         for elm in dataset:
             pass
         self.assertListEqual(elm, self.data[-1])
 
+class TestLen(TestExtract):
     def test_len(self):
         dataset = Extract('example.csv')
         self.assertEqual(len(dataset), len(self.data))
 
+class TestCol(TestExtract):
     def test_col(self):
         dataset = Extract('example.csv')
         col0 = [

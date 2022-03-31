@@ -16,8 +16,13 @@ class TestIntTransform(unittest.TestCase):
             ['8.675418651','-0.242068655','1'],
             ['7.673756466','3.508563011','1']]
 
-    # @unittest.skip("Testing to_float")
-    def test_to_int(self):
+class TestInit(TestIntTransform):
+    def test_lookup(self):
+        to_int = IntTransform()
+        self.assertDictEqual(to_int.lookup, {})
+
+class TestCall(TestIntTransform):
+    def test_simple(self):
         dataset = Extract('example.csv')
         self.assertIsInstance(dataset.col[-1][0], str)
         to_int = IntTransform().fit(dataset.col[-1])

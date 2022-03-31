@@ -1,5 +1,6 @@
 import unittest
 from random import seed
+from deepton.data.analysis import minmax
 from deepton.data.loader import CrossValidationSplitLoader
 from deepton.training.metrics import accuracy
 
@@ -45,9 +46,9 @@ class TestEvaluate(TestTrainer):
         # print("Testing back_propagation algorithm:")
         seed(1)
         # normalize input variables
-        minmax = self.dataset.minmax()
         normalize = NormalizeTransform()
-        self.dataset = normalize(self.dataset, minmax)
+        normalize.fit(self.dataset, minmax)
+        self.dataset = normalize(self.dataset)
         n_folds = 5
         loader = CrossValidationSplitLoader(self.dataset, n_folds)
         # evaluate algorithm

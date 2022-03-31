@@ -5,7 +5,11 @@ from deepton.data.transformer import FloatTransform, IntTransform
 
 from deepton.model.builder import Network
 
-class TestInit(unittest.TestCase):
+
+class TestNetwork(unittest.TestCase):
+    pass
+
+class TestInit(TestNetwork):
     def test_n_inputs_n_hidden_n_outputs(self):        
         seed(1)
         network = Network(2, 2)
@@ -24,7 +28,7 @@ class TestInit(unittest.TestCase):
         expected_network = Network(layers=expected_layers)
         self.assertEqual(expected_network.layers, expected_layers)
 
-class TestEq(unittest.TestCase):
+class TestEq(TestNetwork):
     def test_true(self):
         net1 = Network(layers = [
             [{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
@@ -47,7 +51,7 @@ class TestEq(unittest.TestCase):
         ])
         self.assertNotEqual(net1, net2)     
 
-class TestForwardPorpagate(unittest.TestCase):
+class TestForwardPorpagate(TestNetwork):
     def test_simple(self):
         # test forward propagation
         layers = [[{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
@@ -57,7 +61,7 @@ class TestForwardPorpagate(unittest.TestCase):
         output = network.forward_propagate(row)
         self.assertListEqual(output, [0.6629970129852887, 0.7253160725279748])
 
-class TestBackwardPropagateError(unittest.TestCase):
+class TestBackwardPropagateError(TestNetwork):
     def test_backward_propagate_error(self):
         # test backpropagation of error
         # print("Testing Backpropagate:")
@@ -79,7 +83,7 @@ class TestBackwardPropagateError(unittest.TestCase):
         #     print(layer)
         self.assertEqual(network, expected_error_network)
 
-class TestPredict(unittest.TestCase):
+class TestUpdateWeights(TestNetwork):
     def setUp(self) -> None:
         # load and prepare data
         filename = 'example.csv'
@@ -91,6 +95,31 @@ class TestPredict(unittest.TestCase):
         # convert class column to integers
         to_int = IntTransform().fit(self.dataset.col[-1])
         self.dataset.col[-1] = to_int(self.dataset.col[-1])
+
+    @unittest.skip("update_weights doesn't have an effect?")
+    def test_simple(self):
+        layers = [
+                    [{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614], 'delta': 0.0005348048046610517}],
+                    [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095], 'delta': 0.14619064683582808}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763], 'delta': -0.0771723774346327}]
+                ]
+        network = Network(layers=layers)
+        row = self.dataset[0]
+        network.update_weights(row, l_rate=.5)
+        print(network.layers)
+
+class TestPredict(TestNetwork):
+    def setUp(self) -> None:
+        # load and prepare data
+        filename = 'example.csv'
+        # filename = 'seeds_dataset.csv'
+        self.dataset = Extract(filename)
+        to_float = FloatTransform()
+        for i in range(len(self.dataset[0])-1):
+            self.dataset.col[i] = to_float(self.dataset.col[i])
+        # convert class column to integers
+        to_int = IntTransform().fit(self.dataset.col[-1])
+        self.dataset.col[-1] = to_int(self.dataset.col[-1])
+
     def test_predict(self):
         # Test making predictions with the network
         # print("Testing predict:")

@@ -16,6 +16,7 @@ class TestFloatTransform(unittest.TestCase):
             ['8.675418651','-0.242068655','1'],
             ['7.673756466','3.508563011','1']]
 
+class TestCall(TestFloatTransform):
     def test_to_float(self):
         dataset = Extract('example.csv')
         to_float = FloatTransform()

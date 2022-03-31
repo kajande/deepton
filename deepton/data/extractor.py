@@ -15,7 +15,11 @@ class Col:
 class Extract: 
 	def __init__(self, filename):
 		self.data = self._load_csv(filename)
-		self.col = Col(self)
+		self._col = Col(self)
+
+	@property
+	def col(self):
+		return self._col
 
 	# Load a CSV file
 	def _load_csv(self, filename):
@@ -39,9 +43,3 @@ class Extract:
 
 	def __iter__(self):
 		return iter(self.data)
-
-	# Find the min and max values for each column
-	def minmax(self):
-		minmax = list()
-		stats = [[min(column), max(column)] for column in zip(*self.data)]
-		return stats
