@@ -30,10 +30,9 @@ class Trainer:
         return predictions
 
     # Evaluate an algorithm using a cross validation split
-    def evaluate(self, dataset, n_folds):
-        cross_validation_split = CrossValidationSplitLoader(dataset, n_folds)
+    def evaluate(self, loader):
         scores = list()
-        for train_set, test_set, validation_set in cross_validation_split:
+        for train_set, test_set, validation_set in loader:
             predicted = self.train(train_set, test_set)
             actual = [row[-1] for row in validation_set]
             accuracy = accuracy_metric(actual, predicted)

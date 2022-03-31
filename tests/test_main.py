@@ -2,6 +2,7 @@ import unittest
 
 from random import seed
 from deepton.data.extractor import Extract
+from deepton.data.loader import CrossValidationSplitLoader
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 from deepton.model.network import Network
 from deepton.model.trainer import Trainer
@@ -30,13 +31,14 @@ class TestMain(unittest.TestCase):
         minmax = self.dataset.minmax()
         normalize = NormalizeTransform()
         self.dataset = normalize(self.dataset, minmax)
-        # evaluate algorithm
         n_folds = 5
+        loader = CrossValidationSplitLoader(self.dataset, n_folds)
+        # evaluate algorithm
         l_rate = 0.3
         n_epoch = 500
         n_hidden = 5
         trainer = Trainer(l_rate, n_epoch, n_hidden)
-        scores = trainer.evaluate(self.dataset, n_folds)
+        scores = trainer.evaluate(loader)
         # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
         # print('Scores: %s' % scores)
         self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])
