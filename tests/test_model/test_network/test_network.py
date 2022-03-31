@@ -2,9 +2,8 @@ import unittest
 from random import seed
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform
-from deepton.model import network
 
-from deepton.model.network import Network
+from deepton.model.builder import Network
 
 class TestInit(unittest.TestCase):
     def test_n_inputs_n_hidden_n_outputs(self):        

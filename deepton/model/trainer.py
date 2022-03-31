@@ -1,15 +1,7 @@
 from random import seed
 from deepton.data.loader import CrossValidationSplitLoader
 
-from deepton.model.network import Network
-
-# Calculate accuracy percentage
-def accuracy_metric(actual, predicted):
-	correct = 0
-	for i in range(len(actual)):
-		if actual[i] == predicted[i]:
-			correct += 1
-	return correct / float(len(actual)) * 100.0
+from deepton.model.builder import Network
 
 class Trainer:
     # Train a network for a fixed number of epochs
@@ -30,11 +22,11 @@ class Trainer:
         return predictions
 
     # Evaluate an algorithm using a cross validation split
-    def evaluate(self, loader):
+    def evaluate(self, loader, metric):
         scores = list()
         for train_set, test_set, validation_set in loader:
             predicted = self.train(train_set, test_set)
             actual = [row[-1] for row in validation_set]
-            accuracy = accuracy_metric(actual, predicted)
-            scores.append(accuracy)
+            score = metric(actual, predicted)
+            scores.append(score)
         return scores

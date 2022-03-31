@@ -1,11 +1,12 @@
 import unittest
 from random import seed
 from deepton.data.loader import CrossValidationSplitLoader
+from deepton.training.metrics import accuracy
 
-from deepton.model.network import Network
-from deepton.model.trainer import Trainer
+from deepton.model.builder import Network
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
+from deepton.model.trainer import Trainer
 
 class TestTrainer(unittest.TestCase):
     def setUp(self) -> None:
@@ -54,7 +55,7 @@ class TestEvaluate(TestTrainer):
         n_epoch = 500
         n_hidden = 5
         trainer = Trainer(l_rate, n_epoch, n_hidden)
-        scores = trainer.evaluate(loader)
+        scores = trainer.evaluate(loader, accuracy)
         # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
         # print('Scores: %s' % scores)
         self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])
