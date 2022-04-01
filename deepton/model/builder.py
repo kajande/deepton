@@ -118,7 +118,7 @@ class Network:
         return outputs.index(max(outputs))
 
 
-    def test(self, test):
+    def predictions(self, test):
         predictions = list()
         for row in test:
             prediction = self.predict(row)

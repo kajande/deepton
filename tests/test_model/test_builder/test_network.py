@@ -151,6 +151,9 @@ class TestPredict(TestNetwork):
             self.assertEqual(prediction, row[-1])
             # print('Expected=%d, Got=%d' % (row[-1], prediction))
 
+class TestPredictions(TestNetwork):
+    pass
+
 
 if __name__ == '__main__':
     unittest.main()

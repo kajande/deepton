@@ -18,7 +18,7 @@ class Trainer:
         network = Network(n_inputs, n_outputs)
         network.init(self.n_hidden)
         network.learn(train_data, self)
-        predictions = network.test(test)
+        predictions = network.predictions(test)
         return predictions
 
     # Evaluate an algorithm using a cross validation split
