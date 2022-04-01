@@ -26,7 +26,6 @@ class TestTrainer(unittest.TestCase):
     def test_train_network(self):
         # Test training backprop algorithm
         # print("Testing train_network:")
-        seed(1)
         n_inputs = len(self.dataset[0]) - 1
         n_outputs = len(set([row[-1] for row in self.dataset]))
         # print(f"\n\nn_outputs: {n_outputs}\n\n")
@@ -44,7 +43,6 @@ class TestEvaluate(TestTrainer):
     def test_evaluate(self):
         # Test Backprop on Seeds dataset
         # print("Testing back_propagation algorithm:")
-        seed(1)
         # normalize input variables
         normalize = NormalizeTransform()
         normalize.fit(self.dataset, minmax)

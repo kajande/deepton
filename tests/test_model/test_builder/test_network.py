@@ -27,7 +27,7 @@ class TestInit(TestNetwork):
     def test_n_inputs_n_hidden_n_outputs(self):        
         seed(1)
         network = Network(2, 2)
-        network.init(1)
+        network.init(n_hidden=1, seed=1)
         expected_layers = [
             [{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
             [{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}]
@@ -116,7 +116,6 @@ class TestLearn(TestNetwork):
         trainer = Trainer(l_rate=.5, n_epoch=20, n_hidden=2)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
-        seed(1)
         network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
         network.learn(train_data, trainer)
         expected_network_layers = [

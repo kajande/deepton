@@ -1,5 +1,4 @@
-from random import seed
-from random import random
+import random
 from math import exp
 
 # Calculate neuron activation for an input
@@ -32,14 +31,15 @@ class Network:
         #     layers = self.from_layers(n_inputs, n_hidden, n_outputs)
         # self._layers = layers
 
-    def init(self, n_hidden):
+    def init(self, n_hidden, seed):
         # Don't call this method if self._layers are already initialized (exist)
         # if self._layers:
         #     raise Exception("This model already has layers")
+        random.seed(seed)
         layers = list()
-        hidden_layer = [{'weights':[random() for i in range(self.n_inputs + 1)]} for i in range(n_hidden)]
+        hidden_layer = [{'weights':[random.random() for i in range(self.n_inputs + 1)]} for i in range(n_hidden)]
         layers.append(hidden_layer)
-        output_layer = [{'weights':[random() for i in range(n_hidden + 1)]} for i in range(self.n_outputs)]
+        output_layer = [{'weights':[random.random() for i in range(n_hidden + 1)]} for i in range(self.n_outputs)]
         layers.append(output_layer)
         self._layers = layers
 
@@ -101,7 +101,7 @@ class Network:
 
     def learn(self, train_data, trainer):
         # trainer.train(self)
-        self.init(trainer.n_hidden) # later refactor to `trainer.initializer` instead
+        self.init(trainer.n_hidden, trainer.seed) # later refactor to `trainer.initializer` instead
         for epoch in range(trainer.n_epoch):
             for row in train_data:
                 outputs = self.forward_propagate(row)
