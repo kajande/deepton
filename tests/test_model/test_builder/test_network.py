@@ -23,6 +23,18 @@ class TestNetwork(unittest.TestCase):
         # normalize = NormalizeTransform()
         # normalize.fit(self.dataset, minmax)
         # self.dataset = normalize(self.dataset)
+        self.data_extracted = [
+            [2.7810836,2.550537003,0],
+            [1.465489372,2.362125076,0],
+            [3.396561688,4.400293529,0],
+            [1.38807019,1.850220317,0],
+            [3.06407232,3.005305973,0],
+            [7.627531214,2.759262235,1],
+            [5.332441248,2.088626775,1],
+            [6.922596716,1.77106367,1],
+            [8.675418651,-0.242068655,1],
+            [7.673756466,3.508563011,1]
+        ]
 
 class TestInit(TestNetwork):
     def test_n_inputs_n_hidden_n_outputs(self):        
@@ -140,8 +152,13 @@ class TestPredict(TestNetwork):
 
 class TestPredictions(TestNetwork):
     def test_simple(self):
-        network = Network
-
+        layers = [
+            [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
+            [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
+        ]  
+        network = Network(layers=layers)
+        predictions = network.predictions(self.data_extracted)
+        self.assertListEqual(predictions, [0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
 if __name__ == '__main__':
     unittest.main()
