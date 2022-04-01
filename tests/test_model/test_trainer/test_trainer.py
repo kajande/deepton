@@ -22,7 +22,7 @@ class TestTrainer(unittest.TestCase):
         to_int = IntTransform().fit(self.dataset.col[-1])
         self.dataset.col[-1] = to_int(self.dataset.col[-1])
 
-
+    @unittest.skip("Should be test_train instead")
     def test_train_network(self):
         # Test training backprop algorithm
         # print("Testing train_network:")
