@@ -30,8 +30,9 @@ class TestTrainer(unittest.TestCase):
         n_outputs = len(set([row[-1] for row in self.dataset]))
         # print(f"\n\nn_outputs: {n_outputs}\n\n")
         n_hidden = 2
-        trainer = Trainer(0.5, 20, n_hidden)
+        trainer = Trainer(0.5, 20)
         network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
+        network.init(n_hidden=2, seed=1)
         network.learn(self.dataset, trainer)
         expected_layers = [
             [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
@@ -53,8 +54,8 @@ class TestEvaluate(TestTrainer):
         l_rate = 0.3
         n_epoch = 500
         n_hidden = 5
-        trainer = Trainer(l_rate, n_epoch, n_hidden)
-        scores = trainer.evaluate(loader, accuracy)
+        trainer = Trainer(l_rate, n_epoch)
+        scores = trainer.evaluate(loader, accuracy, n_hidden)
         # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
         # print('Scores: %s' % scores)
         self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])

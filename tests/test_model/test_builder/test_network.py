@@ -113,10 +113,11 @@ class TestUpdateWeights(TestNetwork):
 class TestLearn(TestNetwork):
     def test_simple(self):
         train_data = self.data_extracted
-        trainer = Trainer(l_rate=.5, n_epoch=20, n_hidden=2)
+        trainer = Trainer(l_rate=.5, n_epoch=20)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
+        network.init(n_hidden=2, seed=1)
         network.learn(train_data, trainer)
         expected_network_layers = [
             [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],

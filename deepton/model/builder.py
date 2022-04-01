@@ -101,7 +101,7 @@ class Network:
 
     def learn(self, train_data, trainer):
         # trainer.train(self)
-        self.init(trainer.n_hidden, trainer.seed) # later refactor to `trainer.initializer` instead
+        # self.init(trainer.n_hidden, trainer.seed) # later refactor to `trainer.initializer` instead
         for epoch in range(trainer.n_epoch):
             for row in train_data:
                 outputs = self.forward_propagate(row)
