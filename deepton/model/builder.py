@@ -33,6 +33,9 @@ class Network:
         # self._layers = layers
 
     def init(self, n_hidden):
+        # Don't call this method if self._layers are already initialized (exist)
+        # if self._layers:
+        #     raise Exception("This model already has layers")
         layers = list()
         hidden_layer = [{'weights':[random() for i in range(self.n_inputs + 1)]} for i in range(n_hidden)]
         layers.append(hidden_layer)
