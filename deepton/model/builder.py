@@ -99,6 +99,7 @@ class Network:
                     neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
                 neuron['weights'][-1] -= l_rate * neuron['delta']
 
+    # Backpropagation Algorithm With Stochastic Gradient Descent
     def learn(self, train_data, trainer):
         # trainer.train(self)
         # self.init(trainer.n_hidden, trainer.seed) # later refactor to `trainer.initializer` instead
