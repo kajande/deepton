@@ -128,21 +128,15 @@ class TestLearn(TestNetwork):
 
 class TestPredict(TestNetwork):
     def test_predict(self):
-        # Test making predictions with the network
-        # print("Testing predict:")
-
         layers = [
             [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
             [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
         ]        
         network = Network(layers=layers)
-        prediction = network.predict(self.dataset[0])
-        prediction = network.predict(self.dataset[-1])
-        print(f"\nPREDICTION:\n{prediction}")
-        # for row in self.dataset:
-        #     prediction = network.predict(row)
-        #     self.assertEqual(prediction, row[-1])
-            # print('Expected=%d, Got=%d' % (row[-1], prediction))
+        prediction0 = network.predict([2.7810836, 2.550537003, 0])
+        self.assertEqual(prediction0, 0)
+        prediction1 = network.predict([7.673756466, 3.508563011, 1])
+        self.assertEqual(prediction1, 1)
 
 class TestPredictions(TestNetwork):
     def test_simple(self):
