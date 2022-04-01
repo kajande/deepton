@@ -10,19 +10,6 @@ from deepton.model.trainer import Trainer
 
 class TestNetwork(unittest.TestCase):
     def setUp(self) -> None:
-        # load and prepare data
-        filename = 'example.csv'
-        # filename = 'seeds_dataset.csv'
-        self.dataset = Extract(filename)
-        to_float = FloatTransform()
-        for i in range(len(self.dataset[0])-1):
-            self.dataset.col[i] = to_float(self.dataset.col[i])
-        # convert class column to integers
-        to_int = IntTransform().fit(self.dataset.col[-1])
-        self.dataset.col[-1] = to_int(self.dataset.col[-1])
-        # normalize = NormalizeTransform()
-        # normalize.fit(self.dataset, minmax)
-        # self.dataset = normalize(self.dataset)
         self.data_extracted = [
             [2.7810836,2.550537003,0],
             [1.465489372,2.362125076,0],
@@ -119,16 +106,16 @@ class TestUpdateWeights(TestNetwork):
                     [{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095], 'delta': 0.14619064683582808}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763], 'delta': -0.0771723774346327}]
                 ]
         network = Network(layers=layers)
-        row = self.dataset[0]
+        row = self.data_extracted[0]
         network.update_weights(row, l_rate=.5)
         print(network.layers)
 
 class TestLearn(TestNetwork):
     def test_simple(self):
-        train_data = self.dataset
+        train_data = self.data_extracted
         trainer = Trainer(l_rate=.5, n_epoch=20, n_hidden=2)
-        n_inputs = len(self.dataset[0]) - 1
-        n_outputs = len(set([row[-1] for row in self.dataset]))
+        n_inputs = len(train_data[0]) - 1
+        n_outputs = len(set([row[-1] for row in train_data]))
         seed(1)
         network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
         network.learn(train_data, trainer)
