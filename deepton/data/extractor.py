@@ -1,8 +1,8 @@
 from csv import reader
 
 class Col:
-	def __init__(self, dataset):
-		self.dataset = dataset
+	def __init__(self, data):
+		self.data = data
 
 	def _get_slice(self, slice):
 		start, stop, step = slice.start, slice.stop, slice.step
@@ -16,11 +16,21 @@ class Col:
 	def __getitem__(self, j):
 		if isinstance(j, slice):
 			return self._get_slice(j)
-		return list(map(lambda x: x[j], self.dataset))
+		return list(map(lambda x: x[j], self.data))
 
 	def __setitem__(self, j, value):
-		for i in range(len(value)):
-			self.dataset[i][j] = value[i]
+		if isinstance(j, slice):
+			self._set_slice(j, value)
+		else:
+			for i in range(len(value)):
+				self.data[i][j] = value[i]
+
+	def _set_slice(self, slice, cols):
+		start, stop, step = slice.start, slice.stop, slice.step
+		if not slice.step:
+			step = 1
+		for i in range(start, stop, step):
+			self[i] = cols[i]
 
 
 class Extract: 
@@ -34,11 +44,11 @@ class Extract:
 
 	# Load a CSV file
 	def _load_csv(self, filename):
-		dataset = list()
+		data = list()
 		with open(filename, 'r') as file:
 			csv_reader = reader(file)
 			for row in csv_reader:
 				if not row:
 					continue
-				dataset.append(row)
-		return dataset
+				data.append(row)
+		return data

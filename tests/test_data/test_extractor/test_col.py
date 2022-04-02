@@ -88,3 +88,20 @@ class TestGetSlice(TestCol):
         extracted = Extract('example.csv')
         col = Col(extracted.data)
         self.assertListEqual(col[0:2], self.expected_cols)
+
+class TestSetSlice(TestCol):
+    def test_set_slice(self):
+        data = [
+            [1, 2, 3, 4],
+            [.5, -1, 2, 7],
+            [.3, 1, -2, 1]
+        ]
+        col = Col(data)
+        col[0:2] = [
+            [0, 0, 0],
+            [1, 1, 1]
+        ]
+        self.assertEqual(col[0:2], [
+            [0, 0, 0],
+            [1, 1, 1]
+        ])
