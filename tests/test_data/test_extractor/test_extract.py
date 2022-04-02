@@ -3,7 +3,7 @@ from deepton.data.extractor import Extract
 
 class TestExtract(unittest.TestCase):
     def setUp(self) -> None:        
-        self.data = [['2.7810836','2.550537003','0'],
+        self.expected = [['2.7810836','2.550537003','0'],
             ['1.465489372','2.362125076','0'],
             ['3.396561688','4.400293529','0'],
             ['1.38807019','1.850220317','0'],
@@ -17,30 +17,30 @@ class TestExtract(unittest.TestCase):
 
 class TestInit(TestExtract):
     def test_init(self):
-        dataset = Extract('example.csv')
-        self.assertListEqual(dataset.data, self.data)
+        extracted = Extract('example.csv')
+        self.assertListEqual(extracted.data, self.expected)
 
 class TestGetim(TestExtract):
     def test_getitem(self):
-        dataset = Extract('example.csv')
-        elm = dataset[0]
-        self.assertListEqual(elm, self.data[0])
+        extracted = Extract('example.csv')
+        elm = extracted[0]
+        self.assertListEqual(elm, self.expected[0])
 
 class TestIter(TestExtract):
     def test_iter(self):
-        dataset = Extract('example.csv')
-        for elm in dataset:
+        extracted = Extract('example.csv')
+        for elm in extracted:
             pass
-        self.assertListEqual(elm, self.data[-1])
+        self.assertListEqual(elm, self.expected[-1])
 
 class TestLen(TestExtract):
     def test_len(self):
-        dataset = Extract('example.csv')
-        self.assertEqual(len(dataset), len(self.data))
+        extracted = Extract('example.csv')
+        self.assertEqual(len(extracted), len(self.expected))
 
 class TestCol(TestExtract):
     def test_col(self):
-        dataset = Extract('example.csv')
+        extracted = Extract('example.csv')
         col0 = [
             '2.7810836',
             '1.465489372',
@@ -53,4 +53,4 @@ class TestCol(TestExtract):
             '8.675418651',
             '7.673756466',
         ]
-        self.assertListEqual(dataset.col[0], col0)
+        self.assertListEqual(extracted.col[0], col0)
