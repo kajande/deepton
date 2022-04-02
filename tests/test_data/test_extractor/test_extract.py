@@ -20,24 +20,6 @@ class TestInit(TestExtract):
         extracted = Extract('example.csv')
         self.assertListEqual(extracted.data, self.expected)
 
-class TestGetim(TestExtract):
-    def test_getitem(self):
-        extracted = Extract('example.csv')
-        elm = extracted[0]
-        self.assertListEqual(elm, self.expected[0])
-
-class TestIter(TestExtract):
-    def test_iter(self):
-        extracted = Extract('example.csv')
-        for elm in extracted:
-            pass
-        self.assertListEqual(elm, self.expected[-1])
-
-class TestLen(TestExtract):
-    def test_len(self):
-        extracted = Extract('example.csv')
-        self.assertEqual(len(extracted), len(self.expected))
-
 class TestCol(TestExtract):
     def test_col(self):
         extracted = Extract('example.csv')

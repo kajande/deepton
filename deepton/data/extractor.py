@@ -15,7 +15,7 @@ class Col:
 class Extract: 
 	def __init__(self, filename):
 		self.data = self._load_csv(filename)
-		self._col = Col(self)
+		self._col = Col(self.data)
 
 	@property
 	def col(self):
@@ -31,15 +31,3 @@ class Extract:
 					continue
 				dataset.append(row)
 		return dataset
-
-	# def col(self, i):
-	# 	return list(map(lambda x: x[i], self.data))
-
-	def __getitem__(self, i):
-		return self.data[i]
-
-	def __len__(self):
-		return len(self.data)
-
-	def __iter__(self):
-		return iter(self.data)

@@ -1,10 +1,9 @@
 class FloatTransform:
 	# Convert string column to float
 	def __call__(self, column):
-		# for row in column:
+		column = list(column)
 		for i in range(len(column)):
 			column[i] = float(column[i].strip())
-			# row[self.column] = float(row[self.column].strip())
 		return column
 
 class IntTransform:
@@ -17,7 +16,8 @@ class IntTransform:
 
 	def fit(self, column):
 		class_values = column
-		unique = set(class_values)
+		unique = list(set(class_values))
+		unique.sort()
 		for i, value in enumerate(unique):
 			self.lookup[value] = i
 		return self
@@ -38,8 +38,10 @@ class NormalizeTransform:
 	def fit(self, dataset, method):
 		self._borns = method(dataset)
 
-	def __call__(self, dataset):
-		for row in list(dataset):
+	def __call__(self, cols):
+		cols = [row[:] for row in cols]
+		for row in cols:
 			for i in range(len(row)-1):
 				row[i] = (row[i] - self._borns[i][0]) / (self._borns[i][1] - self._borns[i][0])
-		return dataset
+		return cols
+		

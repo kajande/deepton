@@ -12,8 +12,8 @@ class TestInit(TestCol):
 
 class TestGetitem(TestCol):
     def test_getitem(self):
-        dataset = Extract('example.csv')
-        col = Col(dataset)
+        extracted = Extract('example.csv')
+        col = Col(extracted.data)
         col0 = [
             '2.7810836',
             '1.465489372',
@@ -30,8 +30,8 @@ class TestGetitem(TestCol):
 
     @unittest.skip("Implement later")
     def test_slice(self):
-        dataset = Extract('example.csv')
-        col = Col(dataset)
+        extracted = Extract('example.csv')
+        col = Col(extracted.data)
         cols = [
             ['2.7810836',
             '1.465489372',
@@ -58,8 +58,8 @@ class TestGetitem(TestCol):
 
 class TestSetitem(TestCol):
     def test_setitem(self):
-        dataset = Extract('example.csv')
-        col = Col(dataset)
+        extracted = Extract('example.csv')
+        col = Col(extracted.data)
         col_to_set = [
             '2.7810836',
             '1.465489372',

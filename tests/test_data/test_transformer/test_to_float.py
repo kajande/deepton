@@ -20,8 +20,42 @@ class TestFloatTransform(unittest.TestCase):
 
 class TestCall(TestFloatTransform):
     def test_to_float(self):
-        dataset = Extract('example.csv')
+        col = [
+            '2.7810836',
+            '1.465489372',
+            '3.396561688',
+            '1.38807019',
+            '3.06407232',
+            '7.627531214',
+            '5.332441248',
+            '6.922596716',
+            '8.675418651',
+            '7.673756466',
+        ]
         to_float = FloatTransform()
-        for i in range(len(dataset[0])-1):
-            dataset.col[i] = to_float(dataset.col[i])
-        self.assertListEqual(dataset.data, self.expected)
+        result_col = to_float(col)
+        self.assertEqual(result_col, [
+            2.7810836,
+            1.465489372,
+            3.396561688,
+            1.38807019,
+            3.06407232,
+            7.627531214,
+            5.332441248,
+            6.922596716,
+            8.675418651,
+            7.673756466,
+        ])
+
+        self.assertNotEqual(col, result_col)
+        
+    def test_with_Extract(self):
+        extracted = Extract('example.csv')
+        to_float = FloatTransform()
+        
+        float_col = to_float(extracted.data[0])
+        self.assertNotEqual(extracted.data[0], float_col)
+
+        for i in range(len(extracted.data[0])-1):
+            extracted.col[i] = to_float(extracted.col[i])
+        self.assertListEqual(extracted.data, self.expected)

@@ -1,3 +1,4 @@
+from copy import copy
 import unittest
 
 from deepton.data.extractor import Extract
@@ -20,14 +21,43 @@ class TestIntTransform(unittest.TestCase):
         self.expected_col = [row[-1] for row in self.expected]
 
 class TestInit(TestIntTransform):
-    def test_lookup(self):
+    def test_none(self):
         to_int = IntTransform()
         self.assertDictEqual(to_int.lookup, {})
+    
+    def test_not_none(self):
+        to_int = IntTransform({'0': 0, '1': 1})
+        self.assertDictEqual(to_int.lookup, {'0': 0, '1': 1})
+        self.assertEqual(to_int.lookup['0'], 0)
+        self.assertEqual(to_int.lookup['1'], 1)
+
+class TestFit(TestIntTransform):
+    def test_fit(self):
+        col = ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1']
+        col_copy = list(col)
+        to_int = IntTransform()
+        to_int.fit(col)
+        self.assertTrue(to_int.lookup=={'0': 0, '1': 1})
+        self.assertListEqual(col, col_copy)
+
 
 class TestCall(TestIntTransform):
-    def test_simple(self):
-        dataset = Extract('example.csv')
-        to_int = IntTransform().fit(dataset.col[-1])
-        dataset.col[-1] = to_int(dataset.col[-1])
-        self.assertListEqual(dataset.col[-1], self.expected_col)
-        self.assertEqual(dataset.data, self.expected)
+    def test_call(self):
+        col = ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1']
+        expected_col = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+
+        to_int = IntTransform(lookup={'0': 0, '1': 1})
+        int_col = to_int(col)
+        self.assertListEqual(int_col, expected_col)
+        self.assertNotEqual(int_col, col)
+
+    def test_call_with_Extract(self):
+        extracted = Extract('example.csv')
+        to_int = IntTransform().fit(extracted.col[-1])
+        result_col = to_int(extracted.col[-1])
+        self.assertListEqual(result_col, self.expected_col)
+        
+        self.assertNotEqual(result_col, extracted.col[-1])
+
+        extracted.col[-1] = result_col
+        self.assertEqual(extracted.data, self.expected)

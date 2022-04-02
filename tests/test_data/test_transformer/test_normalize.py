@@ -9,13 +9,13 @@ class TestNormalize(unittest.TestCase):
         # load and prepare data
         filename = 'example.csv'
         # filename = 'seeds_dataset.csv'
-        self.dataset = Extract(filename)
+        self.extracted = Extract(filename)
         to_float = FloatTransform()
-        for i in range(len(self.dataset[0])-1):
-            self.dataset.col[i] = to_float(self.dataset.col[i])
+        for i in range(len(self.extracted.data[0])-1):
+            self.extracted.col[i] = to_float(self.extracted.col[i])
         # convert class column to integers
-        to_int = IntTransform().fit(self.dataset.col[-1])
-        self.dataset.col[-1] = to_int(self.dataset.col[-1])
+        to_int = IntTransform().fit(self.extracted.col[-1])
+        self.extracted.col[-1] = to_int(self.extracted.col[-1])
 
         self.expected = [
             [0.1911550432170284, 0.6015484245552352, 0], 
@@ -31,14 +31,50 @@ class TestNormalize(unittest.TestCase):
         ]
 
 class TestFit(TestNormalize):
-    def test_simple(self):
+    def test_fit(self):
         normalize = NormalizeTransform()
-        normalize.fit(self.dataset, minmax)
-        self.assertListEqual(normalize.borns, minmax(self.dataset))
+        normalize.fit(self.extracted.data, minmax)
+        self.assertListEqual(normalize.borns, minmax(self.extracted.data))
+
+        self.assertNotEqual(self.extracted.data, self.expected)
+
 
 class TestCall(TestNormalize):
-    def test_simple(self):
+    def test_call(self):
+        cols = [
+            [3, 0],
+            [5, 0], 
+            [1, 0], 
+            [0, 0], 
+            [9, 0], 
+            [8, 1],
+            [10, 1],
+            [7, 1],
+            [2, 1],
+            [6, 1]
+        ]
+        normalize = NormalizeTransform(borns=[[1, 3]])
+        normalized_cols = normalize(cols)
+        self.assertEqual(normalized_cols, [
+            [1, 0], 
+            [2, 0], 
+            [0, 0], 
+            [-.5, 0], 
+            [4, 0], 
+            [3.5, 1], 
+            [4.5, 1], 
+            [3, 1], 
+            [.5, 1], 
+            [2.5, 1]
+        ])
+
+    # @unittest.skip("Test simple test_call first")
+    def test_call_with_fit(self):
         normalize = NormalizeTransform()
-        normalize.fit(self.dataset, minmax)
-        dataset = normalize(self.dataset)
-        self.assertListEqual(dataset.data, self.expected)
+        normalize.fit(self.extracted.data, minmax)
+        self.assertNotEqual(self.extracted.data, self.expected)
+
+        normalized = normalize(self.extracted.data)
+        self.assertListEqual(normalized, self.expected)
+
+        self.assertNotEqual(self.extracted.data, self.expected)

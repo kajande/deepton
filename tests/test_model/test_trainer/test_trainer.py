@@ -14,13 +14,13 @@ class TestTrainer(unittest.TestCase):
         # load and prepare data
         filename = 'example.csv'
         # filename = 'seeds_dataset.csv'
-        self.dataset = Extract(filename)
+        self.extracted = Extract(filename)
         to_float = FloatTransform()
-        for i in range(len(self.dataset[0])-1):
-            self.dataset.col[i] = to_float(self.dataset.col[i])
+        for i in range(len(self.extracted.data[0])-1):
+            self.extracted.col[i] = to_float(self.extracted.col[i])
         # convert class column to integers
-        to_int = IntTransform().fit(self.dataset.col[-1])
-        self.dataset.col[-1] = to_int(self.dataset.col[-1])
+        to_int = IntTransform().fit(self.extracted.col[-1])
+        self.extracted.col[-1] = to_int(self.extracted.col[-1])
 
 class TestEvaluate(TestTrainer):
     def test_evaluate(self):
@@ -28,10 +28,10 @@ class TestEvaluate(TestTrainer):
         # print("Testing back_propagation algorithm:")
         # normalize input variables
         normalize = NormalizeTransform()
-        normalize.fit(self.dataset, minmax)
-        self.dataset = normalize(self.dataset)
+        normalize.fit(self.extracted.data, minmax)
+        normalized = normalize(self.extracted.data)
         n_folds = 5
-        loader = CrossValidationSplitLoader(self.dataset, n_folds)
+        loader = CrossValidationSplitLoader(normalized, n_folds)
         # evaluate algorithm
         l_rate = 0.3
         n_epoch = 500
