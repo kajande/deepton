@@ -4,7 +4,18 @@ class Col:
 	def __init__(self, dataset):
 		self.dataset = dataset
 
+	def _get_slice(self, slice):
+		start, stop, step = slice.start, slice.stop, slice.step
+		if not slice.step:
+			step = 1
+		cols = []
+		for i in range(start, stop, step):
+			cols.append(self[i])
+		return cols
+
 	def __getitem__(self, j):
+		if isinstance(j, slice):
+			return self._get_slice(j)
 		return list(map(lambda x: x[j], self.dataset))
 
 	def __setitem__(self, j, value):

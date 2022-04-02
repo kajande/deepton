@@ -28,11 +28,28 @@ class TestGetitem(TestCol):
         ]
         self.assertListEqual(col[0], col0)
 
-    @unittest.skip("Implement later")
-    def test_slice(self):
+class TestSetitem(TestCol):
+    def test_setitem(self):
         extracted = Extract('example.csv')
         col = Col(extracted.data)
-        cols = [
+        col_to_set = [
+            '2.7810836',
+            '1.465489372',
+            '3.396561688',
+            '1.38807019',
+            '3.06407232',
+            '7.627531214',
+            '5.332441248',
+            '6.922596716',
+            '8.675418651',
+            '7.673756466',
+        ]
+        col[1] = col_to_set
+        self.assertListEqual(col[1], col_to_set)
+
+class TestGetSlice(TestCol):
+    def setUp(self):
+        self.expected_cols =[
             ['2.7810836',
             '1.465489372',
             '3.396561688',
@@ -54,23 +71,20 @@ class TestGetitem(TestCol):
             '-0.242068655',
             '3.508563011']
             ]
-        self.assertListEqual(col[0:2], cols)
 
-class TestSetitem(TestCol):
-    def test_setitem(self):
+    def test_get_slice(self):
+        data = [
+            [1, 2, 3, 4],
+            [.5, -1, 2, 7],
+            [.3, 1, -2, 1]
+        ]
+        col = Col(data)
+        self.assertEqual(col[0:2], [
+            [1, .5, .3],
+            [2, -1, 1]
+        ])
+    
+    def test_with_Extract(self):
         extracted = Extract('example.csv')
         col = Col(extracted.data)
-        col_to_set = [
-            '2.7810836',
-            '1.465489372',
-            '3.396561688',
-            '1.38807019',
-            '3.06407232',
-            '7.627531214',
-            '5.332441248',
-            '6.922596716',
-            '8.675418651',
-            '7.673756466',
-        ]
-        col[1] = col_to_set
-        self.assertListEqual(col[1], col_to_set)
+        self.assertListEqual(col[0:2], self.expected_cols)
