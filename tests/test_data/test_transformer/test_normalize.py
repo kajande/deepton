@@ -4,6 +4,7 @@ from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 from deepton.data.analysis import minmax
 
+# @unittest.skip("Testing IntTransform..")
 class TestNormalize(unittest.TestCase):
     def setUp(self) -> None:
         # load and prepare data
@@ -14,7 +15,8 @@ class TestNormalize(unittest.TestCase):
         for i in range(len(self.extracted.data[0])-1):
             self.extracted.col[i] = to_float(self.extracted.col[i])
         # convert class column to integers
-        to_int = IntTransform().fit(self.extracted.col[-1])
+        to_int = IntTransform()
+        to_int.fit(self.extracted.col[-1])
         self.extracted.col[-1] = to_int(self.extracted.col[-1])
 
         self.expected = [

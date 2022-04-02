@@ -1,4 +1,3 @@
-from copy import copy
 import unittest
 
 from deepton.data.extractor import Extract
@@ -21,28 +20,25 @@ class TestIntTransform(unittest.TestCase):
         self.expected_col = [row[-1] for row in self.expected]
 
 class TestInit(TestIntTransform):
-    def test_none(self):
+    def test_lookup_null(self):
         to_int = IntTransform()
-        self.assertDictEqual(to_int.lookup, {})
-    
-    def test_not_none(self):
+        self.assertListEqual(to_int.lookup, [])
+
+    def test_lookup_dict(self):
         to_int = IntTransform({'0': 0, '1': 1})
         self.assertDictEqual(to_int.lookup, {'0': 0, '1': 1})
-        self.assertEqual(to_int.lookup['0'], 0)
-        self.assertEqual(to_int.lookup['1'], 1)
 
-class TestFit(TestIntTransform):
-    def test_fit(self):
-        col = ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1']
-        col_copy = list(col)
-        to_int = IntTransform()
-        to_int.fit(col)
-        self.assertTrue(to_int.lookup=={'0': 0, '1': 1})
-        self.assertListEqual(col, col_copy)
+    def test_lookup_list_null(self):
+        to_int = IntTransform([])
+        self.assertListEqual(to_int.lookup, [])
 
+    def test_lookup_list_of_one_dict(self):
+        to_int = IntTransform([{'0': 0, '1': 1}])
+        self.assertDictEqual(to_int.lookup, {'0': 0, '1': 1})
 
+# @unittest.skip("")
 class TestCall(TestIntTransform):
-    def test_call(self):
+    def test_call_one_col(self):
         col = ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1']
         expected_col = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
 
@@ -51,9 +47,35 @@ class TestCall(TestIntTransform):
         self.assertListEqual(int_col, expected_col)
         self.assertNotEqual(int_col, col)
 
+    def test_call_one_nested_col(self):
+        col = [['0', '0', '0', '0', '0', '1', '1', '1', '1', '1']]
+        expected_col = [[0, 0, 0, 0, 0, 1, 1, 1, 1, 1]]
+
+        to_int = IntTransform(lookup={'0': 0, '1': 1})
+        int_col = to_int(col)
+        self.assertListEqual(int_col, expected_col)
+        self.assertNotEqual(int_col, col)
+
+    def test_call_2_cols(self):
+        cols = [
+            ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1'],
+            ['a', 'b', 'c', 'b', 'a', 'c', 'c', 'b', 'b', 'a']
+        ]
+        expected_cols = [
+            [0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+            [0, 1, 2, 1, 0, 2, 2, 1, 1, 0]
+        ]
+
+        to_int = IntTransform(lookup=[{'0': 0, '1': 1}, {'a': 0, 'b': 1, 'c': 2}])
+        int_cols = to_int(cols)
+        self.assertListEqual(int_cols, expected_cols)
+        self.assertNotEqual(int_cols, cols)
+
+    # @unittest.skip("")
     def test_call_with_Extract(self):
         extracted = Extract('example.csv')
-        to_int = IntTransform().fit(extracted.col[-1])
+        to_int = IntTransform(None)
+        to_int.fit(extracted.col[-1])
         result_col = to_int(extracted.col[-1])
         self.assertListEqual(result_col, self.expected_col)
         
@@ -61,3 +83,37 @@ class TestCall(TestIntTransform):
 
         extracted.col[-1] = result_col
         self.assertEqual(extracted.data, self.expected)
+
+
+class TestFit(TestIntTransform):
+    # @unittest.skip("")
+    def test_fit(self):
+        col = ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1']
+        col_copy = list(col)
+        to_int = IntTransform([])
+        to_int.fit(col)
+        self.assertEqual(to_int.lookup, {'0': 0, '1': 1})
+
+        self.assertListEqual(col, col_copy)
+
+    def test_call_2_cols(self):
+        cols = [
+            ['0', '0', '0', '0', '0', '1', '1', '1', '1', '1'],
+            ['a', 'b', 'c', 'b', 'a', 'c', 'c', 'b', 'b', 'a']
+        ]
+        cols_copy = list(cols)
+
+        to_int = IntTransform()
+        to_int.fit(cols)
+        self.assertEqual(to_int.lookup, [{'0': 0, '1': 1}, {'a': 0, 'b': 1, 'c': 2}])
+
+        self.assertListEqual(cols, cols_copy)
+
+    def test_fit_with_Extract(self):
+        extracted = Extract('example.csv')
+        to_int = IntTransform(None)
+        to_int.fit(extracted.col[-1])
+        self.assertEqual(to_int.lookup, {'0': 0, '1': 1})
+
+if __name__ == '__main__':
+    unittest.main()

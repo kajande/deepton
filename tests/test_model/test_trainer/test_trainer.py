@@ -19,7 +19,8 @@ class TestTrainer(unittest.TestCase):
         for i in range(len(self.extracted.data[0])-1):
             self.extracted.col[i] = to_float(self.extracted.col[i])
         # convert class column to integers
-        to_int = IntTransform().fit(self.extracted.col[-1])
+        to_int = IntTransform()
+        to_int.fit(self.extracted.col[-1])
         self.extracted.col[-1] = to_int(self.extracted.col[-1])
 
 class TestEvaluate(TestTrainer):

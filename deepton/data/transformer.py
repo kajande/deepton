@@ -1,3 +1,4 @@
+
 class FloatTransform:
 	# Convert string column to float
 	def __call__(self, column):
@@ -9,21 +10,49 @@ class FloatTransform:
 class IntTransform:
 	# Convert string column to integer
 	def __init__(self, lookup=None):
-		if lookup:
-			self.lookup = lookup
+		# print("INSIDE INIT:\n")
+		# print(f"\narg_lookup:{lookup}\n")
+		if lookup is None:
+			lookup = []
+		self.lookup = lookup
+		# print(f"\nself._lookup:{self._lookup}\n")
+		# print("OUTSIDE INIT:\n")
+
+
+	@property
+	def lookup(self):
+		if len(self._lookup) == 1:
+			return self._lookup[0]
+		return self._lookup
+
+	@lookup.setter
+	def lookup(self, val):
+		if isinstance(val, dict):
+			self._lookup = [val]
 		else:
-			self.lookup = dict()
+			self._lookup = val
 
-	def fit(self, column):
-		class_values = column
-		unique = list(set(class_values))
-		unique.sort()
-		for i, value in enumerate(unique):
-			self.lookup[value] = i
-		return self
+	def fit(self, cols):
+		if not isinstance(cols[0], list):
+			cols = [cols]
+		for col in cols:
+			lookup = {}
+			unique = list(set(col))
+			unique.sort()
+			for i, value in enumerate(unique):
+				lookup[value] = i
+			self._lookup.append(lookup)
 
-	def __call__(self, column):
-		return [self.lookup[row] for row in column]
+	def __call__(self, cols):
+		if isinstance(cols[0], list): # not nested
+			nested_cols = list(cols)
+		else:
+			nested_cols = [cols]
+		result = [[lookup[row] for row in col] for lookup, col in zip(self._lookup, nested_cols)]
+		if isinstance(cols[0], list): # not nested
+			return result
+		else:
+			return result[0]
 
 
 # Rescale dataset columns to the range 0-1
