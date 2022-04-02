@@ -17,8 +17,8 @@ setup(
                     for beginner learners"),
     license = "MIT",
     keywords = "python biginner learner learn programming artificial-intelligence deep-learning",
-    packages=find_packages('src'),
-    package_dir={'': 'src'},
+    packages=find_packages(),
+    package_dir={'deepton': 'deepton'},
     url='https://github.com/kajande/deepton',
 
 )
