@@ -29,8 +29,10 @@ class IntTransform:
 	def lookup(self, val):
 		if isinstance(val, dict):
 			self._lookup = [val]
-		else:
+		elif isinstance(val, list):
 			self._lookup = val
+		else:
+			raise Exception("Argument must be a `dict` or a `list` ")
 
 	def fit(self, cols):
 		if not isinstance(cols[0], list):

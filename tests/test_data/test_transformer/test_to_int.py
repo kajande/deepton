@@ -36,6 +36,12 @@ class TestInit(TestIntTransform):
         to_int = IntTransform([{'0': 0, '1': 1}])
         self.assertDictEqual(to_int.lookup, {'0': 0, '1': 1})
 
+    def test_lookup_exception(self):
+        with self.assertRaises(Exception):
+            to_int = IntTransform("")
+        with self.assertRaises(Exception):
+            to_int = IntTransform(0)
+
 # @unittest.skip("")
 class TestCall(TestIntTransform):
     def test_call_one_col(self):
