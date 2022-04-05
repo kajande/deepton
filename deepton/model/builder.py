@@ -56,16 +56,19 @@ class Network:
     def __getitem__(self, i):
         return self._layers[i]
 
+    def layer_forward_propagate(self, layer, inputs):
+        new_inputs = []
+        for neuron in layer:
+            activation = activate(neuron['weights'], inputs)
+            neuron['output'] = transfer(activation)
+            new_inputs.append(neuron['output'])
+        return new_inputs
+
     # Forward propagate input to a network output
     def forward_propagate(self, row):
         inputs = row
         for layer in self._layers:
-            new_inputs = []
-            for neuron in layer:
-                activation = activate(neuron['weights'], inputs)
-                neuron['output'] = transfer(activation)
-                new_inputs.append(neuron['output'])
-            inputs = new_inputs
+            inputs = self.layer_forward_propagate(layer, inputs)
         return inputs
 
 
