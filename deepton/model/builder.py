@@ -75,24 +75,33 @@ class Network:
         return inputs
 
 
+    def output_layer_backward_propagate_error(self, layer, expected):
+        errors = list()
+        for j in range(len(layer)):
+            neuron = layer[j]
+            errors.append(neuron['output'] - expected[j])
+        for neuron, error in zip(layer, errors):
+            neuron['delta'] = error * transfer_derivative(neuron['output'])
+
+    def layer_backward_propagate_error(self, layer, next_layer):
+            errors = list()
+            for j in range(len(layer)):
+                error = 0.0
+                for neuron in next_layer:
+                    error += (neuron['weights'][j] * neuron['delta'])
+                errors.append(error)
+            for neuron, error in zip(layer, errors):
+                neuron['delta'] = error * transfer_derivative(neuron['output'])
+
     # Backpropagate error and store in neurons
     def backward_propagate_error(self, expected):
         for i in reversed(range(len(self))):
-            layer = self[i]
-            errors = list()
-            if i != len(self)-1:
-                for j in range(len(layer)):
-                    error = 0.0
-                    for neuron in self[i + 1]:
-                        error += (neuron['weights'][j] * neuron['delta'])
-                    errors.append(error)
+            layer = self._layers[i]
+            if i == len(self)-1: # last layer: output layer
+                self.output_layer_backward_propagate_error(layer, expected)
             else:
-                for j in range(len(layer)):
-                    neuron = layer[j]
-                    errors.append(neuron['output'] - expected[j])
-            for j in range(len(layer)):
-                neuron = layer[j]
-                neuron['delta'] = errors[j] * transfer_derivative(neuron['output'])
+                next_layer = self._layers[i + 1]
+                self.layer_backward_propagate_error(layer, next_layer)
 
     # Update network weights with error
     def update_weights(self, row, l_rate):
