@@ -25,7 +25,10 @@ class Network:
         #     self.layers = self.from_layers(n_inputs, n_hidden, n_outputs)
         self.n_inputs = n_inputs
         self.n_outputs = n_outputs
-        self._layers = layers
+        if layers is None:
+            self._layers = []
+        else:
+            self._layers = layers
 
         # if not layers:
         #     layers = self.from_layers(n_inputs, n_hidden, n_outputs)
@@ -36,12 +39,12 @@ class Network:
         # if self._layers:
         #     raise Exception("This model already has layers")
         random.seed(seed)
-        layers = list()
-        hidden_layer = [{'weights':[random.random() for i in range(self.n_inputs + 1)]} for i in range(n_hidden)]
-        layers.append(hidden_layer)
-        output_layer = [{'weights':[random.random() for i in range(n_hidden + 1)]} for i in range(self.n_outputs)]
-        layers.append(output_layer)
-        self._layers = layers
+        hidden_layer = self.layer_init(self.n_inputs, n_hidden)
+        output_layer = self.layer_init(n_hidden, self.n_outputs)
+        self._layers.extend([hidden_layer, output_layer])
+
+    def layer_init(self, n_inputs, n_outputs):
+        return [{'weights':[random.random() for i in range(n_inputs + 1)]} for i in range(n_outputs)]
 
     @property
     def layers(self):
