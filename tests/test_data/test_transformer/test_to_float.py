@@ -87,8 +87,8 @@ class TestCall(TestFloatTransform):
         extracted = Extract('example.csv')
         to_float = FloatTransform()
         
-        float_cols = to_float(extracted.data[0:2])
-        self.assertNotEqual(extracted.data[0:2], float_cols)
+        float_cols = to_float(extracted.data[:2])
+        self.assertNotEqual(extracted.data[:2], float_cols)
 
-        extracted.col[0:2] = to_float(extracted.col[0:2])
+        extracted.col[0:2] = to_float(extracted.col[:2])
         self.assertListEqual(extracted.data, self.expected)

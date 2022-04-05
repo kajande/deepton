@@ -83,7 +83,19 @@ class TestGetSlice(TestCol):
             [1, .5, .3],
             [2, -1, 1]
         ])
-    
+
+    def test_slice_start_none(self):
+        data = [
+            [1, 2, 3, 4],
+            [.5, -1, 2, 7],
+            [.3, 1, -2, 1]
+        ]
+        col = Col(data)
+        self.assertEqual(col[:2], [
+            [1, .5, .3],
+            [2, -1, 1]
+        ])
+
     def test_with_Extract(self):
         extracted = Extract('example.csv')
         col = Col(extracted.data)

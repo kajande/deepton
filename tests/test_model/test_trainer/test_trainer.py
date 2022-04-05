@@ -16,8 +16,7 @@ class TestTrainer(unittest.TestCase):
         # filename = 'seeds_dataset.csv'
         self.extracted = Extract(filename)
         to_float = FloatTransform()
-        for i in range(len(self.extracted.data[0])-1):
-            self.extracted.col[i] = to_float(self.extracted.col[i])
+        self.extracted.col[:-1] = to_float(self.extracted.col[:-1])
         # convert class column to integers
         to_int = IntTransform()
         to_int.fit(self.extracted.col[-1])
