@@ -1,3 +1,4 @@
+from re import L
 import unittest
 
 from deepton.data.extractor import Extract
@@ -19,7 +20,7 @@ class TestFloatTransform(unittest.TestCase):
         ]
 
 class TestCall(TestFloatTransform):
-    def test_to_float(self):
+    def test_call(self):
         col = [
             '2.7810836',
             '1.465489372',
@@ -48,6 +49,28 @@ class TestCall(TestFloatTransform):
         ])
 
         self.assertNotEqual(col, result_col)
+
+    def test_call_2_cols(self):
+        cols = [
+            ['2.7810836',
+            '1.465489372',
+            '3.396561688'],
+            ['2.550537003',
+            '2.362125076',
+            '4.400293529']
+        ]
+        expected_cols = [
+            [2.7810836,
+            1.465489372,
+            3.396561688],
+            [2.550537003,
+            2.362125076,
+            4.400293529]
+        ]
+        to_float = FloatTransform()
+        result_cols = to_float(cols)
+        self.assertListEqual(result_cols, expected_cols)
+        self.assertNotEqual(cols, result_cols)
         
     def test_with_Extract(self):
         extracted = Extract('example.csv')
@@ -58,4 +81,14 @@ class TestCall(TestFloatTransform):
 
         for i in range(len(extracted.data[0])-1):
             extracted.col[i] = to_float(extracted.col[i])
+        self.assertListEqual(extracted.data, self.expected)
+
+    def test_with_Extract_2_cols(self):
+        extracted = Extract('example.csv')
+        to_float = FloatTransform()
+        
+        float_cols = to_float(extracted.data[0:2])
+        self.assertNotEqual(extracted.data[0:2], float_cols)
+
+        extracted.col[0:2] = to_float(extracted.col[0:2])
         self.assertListEqual(extracted.data, self.expected)

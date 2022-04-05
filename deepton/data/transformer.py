@@ -1,11 +1,22 @@
 
 class FloatTransform:
 	# Convert string column to float
-	def __call__(self, column):
+	def _call_one_column(self, column):
 		column = list(column)
 		for i in range(len(column)):
 			column[i] = float(column[i].strip())
 		return column
+
+	def __call__(self, cols):
+		if isinstance(cols[0], list):
+			nested_cols = list(cols)
+		else:
+			nested_cols = [cols]
+		results = [self._call_one_column(col) for col in nested_cols]
+		if isinstance(cols[0], list):
+			return results
+		else:
+			return results[0]
 
 class IntTransform:
 	# Convert string column to integer
