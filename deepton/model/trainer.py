@@ -1,7 +1,7 @@
 from random import seed
 from deepton.data.loader import CrossValidationSplitLoader
 
-from deepton.model.builder import Network
+from deepton.model.network import Network
 
 class Trainer:
     # Train a network for a fixed number of epochs

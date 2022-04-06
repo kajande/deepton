@@ -4,7 +4,7 @@ from deepton.data.analysis import minmax
 from deepton.data.loader import CrossValidationSplitLoader
 from deepton.training.metrics import accuracy
 
-from deepton.model.builder import Network
+from deepton.model.network import Network
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 from deepton.model.trainer import Trainer
