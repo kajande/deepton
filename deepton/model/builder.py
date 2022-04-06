@@ -103,16 +103,20 @@ class Network:
                 next_layer = self._layers[i + 1]
                 self.layer_backward_propagate_error(layer, next_layer)
 
+    def layer_update_weights(self, layer, inputs, l_rate):
+        for neuron in layer:
+            for j in range(len(inputs)):
+                neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
+            neuron['weights'][-1] -= l_rate * neuron['delta']
+
     # Update network weights with error
     def update_weights(self, row, l_rate):
-        for i in range(len(self)):
-            inputs = row[:-1]
-            if i != 0:
-                inputs = [neuron['output'] for neuron in self[i - 1]]
-            for neuron in self[i]:
-                for j in range(len(inputs)):
-                    neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
-                neuron['weights'][-1] -= l_rate * neuron['delta']
+        for i, layer in enumerate(self._layers):
+            if i == 0:
+                inputs = row[:-1]
+            else:
+                inputs = [neuron['output'] for neuron in self._layers[i - 1]]
+            self.layer_update_weights(layer, inputs, l_rate)
 
     # Backpropagation Algorithm With Stochastic Gradient Descent
     def learn(self, train_data, trainer):
