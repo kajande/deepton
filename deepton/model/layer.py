@@ -17,9 +17,24 @@ def transfer_derivative(output):
 	return output * (1.0 - output)
 
 
-def layer_init(n_inputs, n_outputs):
-    return [{'weights':[random.random() for i in range(n_inputs + 1)]} for i in range(n_outputs)]
+class Layer:
+    def __init__(self, n_inputs=None, n_outputs=None, neurons=None):
+        if neurons is None:
+            self.neurons = [{'weights':[random.random() for i in range(n_inputs + 1)]} for i in range(n_outputs)]
+        else:
+            self.neurons = neurons
 
+    def __eq__(self, other) -> bool:
+        return self.neurons == other.neurons
+
+    def __iter__(self):
+        return iter(self.neurons)
+
+    def __len__(self):
+        return len(self.neurons)
+
+    def __getitem__(self, i):
+        return self.neurons[i]
 
 def layer_forward_propagate(layer, inputs):
     new_inputs = []

@@ -3,6 +3,7 @@ from random import seed
 from deepton.data.analysis import minmax
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
+from deepton.model.layer import Layer
 
 from deepton.model.network import Network
 from deepton.model.trainer import Trainer
@@ -28,11 +29,11 @@ class TestInit(TestNetwork):
         seed(1)
         network = Network(2, 2)
         network.init(n_hidden=1, seed=1)
-        expected_layers = [
-            [{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}],
-            [{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}]
-        ]
-        self.assertEqual(network.layers, expected_layers)
+        expected_network = Network(layers=[
+            Layer(neurons=[{'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614]}]),
+            Layer(neurons=[{'weights': [0.2550690257394217, 0.49543508709194095]}, {'weights': [0.4494910647887381, 0.651592972722763]}])
+        ])
+        self.assertEqual(network.layers, expected_network.layers)
 
     def test_init(self):
         expected_layers = [
@@ -119,11 +120,12 @@ class TestLearn(TestNetwork):
         network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
         network.init(n_hidden=2, seed=1)
         network.learn(train_data, trainer)
-        expected_network_layers = [
-            [{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}],
-            [{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}]
+        expected_layers = [
+            Layer(neurons=[{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}]),
+            Layer(neurons=[{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}])
         ]
-        self.assertListEqual(network.layers, expected_network_layers)
+        expected_network = Network(layers=expected_layers)
+        self.assertListEqual(network.layers, expected_network.layers)
 
 class TestPredict(TestNetwork):
     def test_predict(self):

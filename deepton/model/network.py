@@ -1,6 +1,6 @@
 import random
 
-from deepton.model.layer import layer_backward_propagate_error, layer_forward_propagate, layer_init, layer_update_weights, output_layer_backward_propagate_error
+from deepton.model.layer import Layer, layer_backward_propagate_error, layer_forward_propagate, layer_update_weights, output_layer_backward_propagate_error
 
 
 class Network:
@@ -26,8 +26,8 @@ class Network:
         # if self._layers:
         #     raise Exception("This model already has layers")
         random.seed(seed)
-        hidden_layer = layer_init(self.n_inputs, n_hidden)
-        output_layer = layer_init(n_hidden, self.n_outputs)
+        hidden_layer = Layer(self.n_inputs, n_hidden)
+        output_layer = Layer(n_hidden, self.n_outputs)
         self._layers.extend([hidden_layer, output_layer])
 
     @property
