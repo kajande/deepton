@@ -1,6 +1,6 @@
 import random
 
-from deepton.model.layer import Layer, layer_backward_propagate_error, layer_update_weights
+from deepton.model.layer import Layer, layer_update_weights
 
 
 class Network:
@@ -58,7 +58,7 @@ class Network:
                 layer.output_layer_backward_propagate_error(expected)
             else:
                 next_layer = self._layers[i + 1]
-                layer_backward_propagate_error(layer, next_layer)
+                layer.backward_propagate_error(next_layer)
 
     # Update network weights with error
     def update_weights(self, row, l_rate):
