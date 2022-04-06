@@ -44,13 +44,13 @@ class Layer:
             new_inputs.append(neuron['output'])
         return new_inputs
 
-def output_layer_backward_propagate_error(layer, expected):
-    errors = list()
-    for j in range(len(layer)):
-        neuron = layer[j]
-        errors.append(neuron['output'] - expected[j])
-    for neuron, error in zip(layer, errors):
-        neuron['delta'] = error * transfer_derivative(neuron['output'])
+    def output_layer_backward_propagate_error(self, expected):
+        errors = list()
+        for j in range(len(self.neurons)):
+            neuron = self.neurons[j]
+            errors.append(neuron['output'] - expected[j])
+        for neuron, error in zip(self.neurons, errors):
+            neuron['delta'] = error * transfer_derivative(neuron['output'])
 
 def layer_backward_propagate_error(layer, next_layer):
     errors = list()

@@ -1,6 +1,6 @@
 import random
 
-from deepton.model.layer import Layer, layer_backward_propagate_error, layer_update_weights, output_layer_backward_propagate_error
+from deepton.model.layer import Layer, layer_backward_propagate_error, layer_update_weights
 
 
 class Network:
@@ -55,7 +55,7 @@ class Network:
         for i in reversed(range(len(self))):
             layer = self._layers[i]
             if i == len(self)-1: # last layer: output layer
-                output_layer_backward_propagate_error(layer, expected)
+                layer.output_layer_backward_propagate_error(expected)
             else:
                 next_layer = self._layers[i + 1]
                 layer_backward_propagate_error(layer, next_layer)
