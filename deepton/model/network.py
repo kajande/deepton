@@ -1,6 +1,6 @@
 import random
 
-from deepton.model.layer import Layer, layer_update_weights
+from deepton.model.layer import Layer
 
 
 class Network:
@@ -67,7 +67,7 @@ class Network:
                 inputs = row[:-1]
             else:
                 inputs = [neuron['output'] for neuron in self._layers[i - 1]]
-            layer_update_weights(layer, inputs, l_rate)
+            layer.update_weights(inputs, l_rate)
 
     # Backpropagation Algorithm With Stochastic Gradient Descent
     def learn(self, train_data, trainer):

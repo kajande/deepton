@@ -62,8 +62,8 @@ class Layer:
         for neuron, error in zip(self.neurons, errors):
             neuron['delta'] = error * transfer_derivative(neuron['output'])
 
-def layer_update_weights(layer, inputs, l_rate):
-    for neuron in layer:
-        for j in range(len(inputs)):
-            neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
-        neuron['weights'][-1] -= l_rate * neuron['delta']
+    def update_weights(self, inputs, l_rate):
+        for neuron in self.neurons:
+            for j in range(len(inputs)):
+                neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
+            neuron['weights'][-1] -= l_rate * neuron['delta']
