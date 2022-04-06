@@ -36,13 +36,13 @@ class Layer:
     def __getitem__(self, i):
         return self.neurons[i]
 
-def layer_forward_propagate(layer, inputs):
-    new_inputs = []
-    for neuron in layer:
-        activation = activate(neuron['weights'], inputs)
-        neuron['output'] = transfer(activation)
-        new_inputs.append(neuron['output'])
-    return new_inputs
+    def forward_propagate(self, inputs):
+        new_inputs = []
+        for neuron in self.neurons:
+            activation = activate(neuron['weights'], inputs)
+            neuron['output'] = transfer(activation)
+            new_inputs.append(neuron['output'])
+        return new_inputs
 
 def output_layer_backward_propagate_error(layer, expected):
     errors = list()

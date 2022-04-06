@@ -1,6 +1,6 @@
 import random
 
-from deepton.model.layer import Layer, layer_backward_propagate_error, layer_forward_propagate, layer_update_weights, output_layer_backward_propagate_error
+from deepton.model.layer import Layer, layer_backward_propagate_error, layer_update_weights, output_layer_backward_propagate_error
 
 
 class Network:
@@ -47,7 +47,7 @@ class Network:
     def forward_propagate(self, row):
         inputs = row
         for layer in self._layers:
-            inputs = layer_forward_propagate(layer, inputs)
+            inputs = layer.forward_propagate(inputs)
         return inputs
 
     # Backpropagate error and store in neurons
