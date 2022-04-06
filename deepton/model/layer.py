@@ -1,0 +1,54 @@
+import random
+from math import exp
+
+# Calculate neuron activation for an input
+def activate(weights, inputs):
+	activation = weights[-1]
+	for i in range(len(weights)-1):
+		activation += weights[i] * inputs[i]
+	return activation
+
+# Transfer neuron activation
+def transfer(activation):
+	return 1.0 / (1.0 + exp(-activation))
+
+# Calculate the derivative of an neuron output
+def transfer_derivative(output):
+	return output * (1.0 - output)
+
+
+def layer_init(n_inputs, n_outputs):
+    return [{'weights':[random.random() for i in range(n_inputs + 1)]} for i in range(n_outputs)]
+
+
+def layer_forward_propagate(layer, inputs):
+    new_inputs = []
+    for neuron in layer:
+        activation = activate(neuron['weights'], inputs)
+        neuron['output'] = transfer(activation)
+        new_inputs.append(neuron['output'])
+    return new_inputs
+
+def output_layer_backward_propagate_error(layer, expected):
+    errors = list()
+    for j in range(len(layer)):
+        neuron = layer[j]
+        errors.append(neuron['output'] - expected[j])
+    for neuron, error in zip(layer, errors):
+        neuron['delta'] = error * transfer_derivative(neuron['output'])
+
+def layer_backward_propagate_error(layer, next_layer):
+    errors = list()
+    for j in range(len(layer)):
+        error = 0.0
+        for neuron in next_layer:
+            error += (neuron['weights'][j] * neuron['delta'])
+        errors.append(error)
+    for neuron, error in zip(layer, errors):
+        neuron['delta'] = error * transfer_derivative(neuron['output'])
+
+def layer_update_weights(layer, inputs, l_rate):
+    for neuron in layer:
+        for j in range(len(inputs)):
+            neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
+        neuron['weights'][-1] -= l_rate * neuron['delta']
