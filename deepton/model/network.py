@@ -50,15 +50,17 @@ class Network:
             inputs = layer.forward_propagate(inputs)
         return inputs
 
+    def output_errors(self, expected, outputs):
+        i = len(self._layers)-1
+        layer = self._layers[i]
+        layer.output_errors(expected, outputs)
+
     # Backpropagate error and store in neurons
-    def backward_propagate_error(self, expected):
-        for i in reversed(range(len(self))):
+    def backward_propagate_errors(self):
+        for i in reversed(range(len(self._layers)-1)):
             layer = self._layers[i]
-            if i == len(self)-1: # last layer: output layer
-                layer.output_layer_backward_propagate_error(expected)
-            else:
-                next_layer = self._layers[i + 1]
-                layer.backward_propagate_error(next_layer)
+            next_layer = self._layers[i + 1]
+            layer.backward_propagate_errors(next_layer)
 
     # Update network weights with error
     def update_weights(self, row, l_rate):
@@ -79,7 +81,8 @@ class Network:
                 expected = [0 for i in range(self.n_outputs)]
                 # print(f"\n\nn_outputs: {trainer.n_outputs}\n\n")
                 expected[row[-1]] = 1
-                self.backward_propagate_error(expected)
+                self.output_errors(expected, outputs)
+                self.backward_propagate_errors()
                 self.update_weights(row, trainer.l_rate)
         # update here the `trainer.initializer` parameters
 

@@ -88,7 +88,8 @@ class TestBackwardPropagateError(TestNetwork):
         ]
         network = Network(layers=layers)
         expected = [0, 1]
-        network.backward_propagate_error(expected)
+        network.output_errors(expected, [0.6213859615555266, 0.6573693455986976])
+        network.backward_propagate_errors()
 
         expected_error_layers = [
             Layer(neurons=[{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614], 'delta': 0.0005348048046610517}]),
