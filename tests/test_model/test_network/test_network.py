@@ -92,13 +92,31 @@ class TestBackwardPropagateError(TestNetwork):
         network.backward_propagate_errors()
 
         expected_error_layers = [
-            Layer(neurons=[{'output': 0.7105668883115941, 'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614], 'delta': 0.0005348048046610517}]),
-            Layer(neurons=[{'output': 0.6213859615555266, 'weights': [0.2550690257394217, 0.49543508709194095], 'delta': 0.14619064683582808}, {'output': 0.6573693455986976, 'weights': [0.4494910647887381, 0.651592972722763], 'delta': -0.0771723774346327}])
+            Layer(neurons=[
+                {
+                    'output': 0.7105668883115941, 
+                    'weights': [0.13436424411240122, 0.8474337369372327, 0.763774618976614], 
+                    'error': 0.0026004117552590952,
+                    'delta': 0.0005348048046610517
+                }
+            ]),
+            Layer(neurons=[
+                {
+                    'output': 0.6213859615555266, 
+                    'weights': [0.2550690257394217, 0.49543508709194095], 
+                    'error': 0.6213859615555266,
+                    'delta': 0.14619064683582808
+                }, 
+                {
+                    'output': 0.6573693455986976, 
+                    'weights': [0.4494910647887381, 0.651592972722763], 
+                    'error': -0.34263065440130236,
+                    'delta': -0.0771723774346327
+                }
+            ])
         ]
         expected_error_network = Network(layers=expected_error_layers)
-        # print("\nERROR NETWORK:")
-        # for layer in layers:
-        #     print(layer)
+
         self.assertEqual(network, expected_error_network)
 
 class TestUpdateWeights(TestNetwork):
@@ -124,8 +142,34 @@ class TestLearn(TestNetwork):
         network.init(n_hidden=2, seed=1)
         network.learn(train_data, trainer)
         expected_layers = [
-            Layer(neurons=[{'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 'output': 0.029980305604426185, 'delta': 0.0059546604162323625}, {'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 'output': 0.9456229000211323, 'delta': -0.0026279652850863837}]),
-            Layer(neurons=[{'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 'output': 0.23648794202357587, 'delta': 0.04270059278364587}, {'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 'output': 0.7790535202438367, 'delta': -0.03803132596437354}])
+            Layer(neurons=[
+                {
+                    'weights': [-1.4688375095432327, 1.850887325439514, 1.0858178629550297], 
+                    'output': 0.029980305604426185, 
+                    'error': 0.2047577704930848,
+                    'delta': 0.0059546604162323625
+                }, 
+                {
+                    'weights': [0.37711098142462157, -0.0625909894552989, 0.2765123702642716], 
+                    'output': 0.9456229000211323, 
+                    'error': -0.05110761338809097,
+                    'delta': -0.0026279652850863837
+                }
+            ]),
+            Layer(neurons=[
+                {
+                    'weights': [2.515394649397849, -0.3391927502445985, -0.9671565426390275], 
+                    'output': 0.23648794202357587, 
+                    'error': 0.23648794202357587,
+                    'delta': 0.04270059278364587
+                }, 
+                {
+                    'weights': [-2.5584149848484263, 1.0036422106209202, 0.42383086467582715], 
+                    'output': 0.7790535202438367, 
+                    'error': -0.22094647975616333,
+                    'delta': -0.03803132596437354
+                }
+            ])
         ]
         expected_network = Network(layers=expected_layers)
         self.assertListEqual(network.layers, expected_network.layers)

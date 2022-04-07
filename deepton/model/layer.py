@@ -45,23 +45,16 @@ class Layer:
         return new_inputs
 
     def output_errors(self, expected, outputs):
-        errors = list()
-        for j in range(len(self.neurons)):
-            neuron = self.neurons[j]
-            error = outputs[j] - expected[j]
-            errors.append(error)
-        for neuron, error in zip(self.neurons, errors):
-            neuron['delta'] = error * transfer_derivative(neuron['output'])
+        for j, neuron in enumerate(self.neurons):
+            neuron['error'] = outputs[j] - expected[j]
+            neuron['delta'] = neuron['error'] * transfer_derivative(neuron['output'])
 
     def backward_propagate_errors(self, next_layer):
-        errors = list()
-        for j in range(len(self.neurons)):
-            error = 0.0
-            for neuron in next_layer:
-                error += (neuron['weights'][j] * neuron['delta'])
-            errors.append(error)
-        for neuron, error in zip(self.neurons, errors):
-            neuron['delta'] = error * transfer_derivative(neuron['output'])
+        for j, neuron in enumerate(self.neurons):
+            neuron['error'] = 0.0
+            for next_neuron in next_layer:
+                neuron['error'] += next_neuron['weights'][j] * next_neuron['delta']
+            neuron['delta'] = neuron['error'] * transfer_derivative(neuron['output'])
 
     def update_weights(self, inputs, l_rate):
         for neuron in self.neurons:
