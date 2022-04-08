@@ -47,13 +47,15 @@ class Layer:
     def output_errors(self, expected, outputs):
         for j, neuron in enumerate(self.neurons):
             neuron['error'] = outputs[j] - expected[j]
-            neuron['delta'] = neuron['error'] * transfer_derivative(neuron['output'])
 
     def backward_propagate_errors(self, next_layer):
         for j, neuron in enumerate(self.neurons):
             neuron['error'] = 0.0
             for next_neuron in next_layer:
                 neuron['error'] += next_neuron['weights'][j] * next_neuron['delta']
+
+    def backward_propagate_grads(self):
+        for neuron in self.neurons:
             neuron['delta'] = neuron['error'] * transfer_derivative(neuron['output'])
 
     def update_weights(self, inputs, l_rate):
