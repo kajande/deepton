@@ -2,11 +2,6 @@ import random
 
 from deepton.model.neuron import Neuron
 
-# Calculate the derivative of an neuron output
-def transfer_derivative(output):
-	return output * (1.0 - output)
-
-
 class Layer:
     def __init__(self, n_inputs=None, n_outputs=None, neurons=None):
         if neurons is None:
@@ -48,7 +43,7 @@ class Layer:
 
     def backward_propagate_grads(self):
         for neuron in self.neurons:
-            neuron.delta = neuron.error * transfer_derivative(neuron.output)
+            neuron.delta = neuron.error * neuron.transfer_derivative(neuron.output)
 
     def update_weights(self, inputs, l_rate):
         for neuron in self.neurons:

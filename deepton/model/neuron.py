@@ -20,3 +20,7 @@ class Neuron:
     # Transfer neuron activation
     def transfer(self, activation):
         self.output = 1.0 / (1.0 + exp(-activation))
+
+    # Calculate the derivative of an neuron output
+    def transfer_derivative(self, output):
+        return output * (1.0 - output)
