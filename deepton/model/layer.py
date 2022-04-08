@@ -1,11 +1,6 @@
 import random
-from math import exp
 
 from deepton.model.neuron import Neuron
-
-# Transfer neuron activation
-def transfer(activation):
-	return 1.0 / (1.0 + exp(-activation))
 
 # Calculate the derivative of an neuron output
 def transfer_derivative(output):
@@ -37,7 +32,7 @@ class Layer:
         new_inputs = []
         for neuron in self.neurons:
             activation = neuron.activate(inputs)
-            neuron.output = transfer(activation)
+            neuron.transfer(activation)
             new_inputs.append(neuron.output)
         return new_inputs
 

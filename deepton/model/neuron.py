@@ -1,3 +1,5 @@
+from math import exp
+
 class Neuron:
     def __init__(self, weights=None, output=None, error=None, delta=None):
         self.weights = weights
@@ -14,3 +16,7 @@ class Neuron:
         for i in range(len(self.weights)-1):
             activation += self.weights[i] * inputs[i]
         return activation
+
+    # Transfer neuron activation
+    def transfer(self, activation):
+        self.output = 1.0 / (1.0 + exp(-activation))
