@@ -11,15 +11,15 @@ class Neuron:
         return self.weights == other.weights
 
     # Calculate neuron activation for an input
-    def activate(self, inputs):
+    def forward_propagate(self, inputs):
         activation = self.weights[-1]
         for i in range(len(self.weights)-1):
             activation += self.weights[i] * inputs[i]
-        return activation
+        self.activation = activation
 
     # Transfer neuron activation
-    def transfer(self, activation):
-        self.output = 1.0 / (1.0 + exp(-activation))
+    def activate(self):
+        self.output = 1.0 / (1.0 + exp(-self.activation))
 
     # Calculate the derivative of an neuron output
     def transfer_derivative(self, output):

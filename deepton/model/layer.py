@@ -26,8 +26,8 @@ class Layer:
     def forward_propagate(self, inputs):
         new_inputs = []
         for neuron in self.neurons:
-            activation = neuron.activate(inputs)
-            neuron.transfer(activation)
+            neuron.forward_propagate(inputs)
+            neuron.activate()
             new_inputs.append(neuron.output)
         return new_inputs
 
