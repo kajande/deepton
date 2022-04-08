@@ -72,7 +72,7 @@ class Network:
             if i == 0:
                 inputs = row[:-1]
             else:
-                inputs = [neuron['output'] for neuron in self._layers[i - 1]]
+                inputs = [neuron.output for neuron in self._layers[i - 1]]
             layer.update_weights(inputs, l_rate)
 
     # Backpropagation Algorithm With Stochastic Gradient Descent

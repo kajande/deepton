@@ -1,6 +1,8 @@
 import random
 from math import exp
 
+from deepton.model.neuron import Neuron
+
 # Calculate neuron activation for an input
 def activate(weights, inputs):
 	activation = weights[-1]
@@ -20,7 +22,9 @@ def transfer_derivative(output):
 class Layer:
     def __init__(self, n_inputs=None, n_outputs=None, neurons=None):
         if neurons is None:
-            self.neurons = [{'weights':[random.random() for i in range(n_inputs + 1)]} for i in range(n_outputs)]
+            self.neurons = [
+                Neuron(weights=[random.random() for i in range(n_inputs + 1)]) for i in range(n_outputs)
+            ]
         else:
             self.neurons = neurons
 
@@ -39,27 +43,27 @@ class Layer:
     def forward_propagate(self, inputs):
         new_inputs = []
         for neuron in self.neurons:
-            activation = activate(neuron['weights'], inputs)
-            neuron['output'] = transfer(activation)
-            new_inputs.append(neuron['output'])
+            activation = activate(neuron.weights, inputs)
+            neuron.output = transfer(activation)
+            new_inputs.append(neuron.output)
         return new_inputs
 
     def output_errors(self, expected, outputs):
         for j, neuron in enumerate(self.neurons):
-            neuron['error'] = outputs[j] - expected[j]
+            neuron.error = outputs[j] - expected[j]
 
     def backward_propagate_errors(self, next_layer):
         for j, neuron in enumerate(self.neurons):
-            neuron['error'] = 0.0
+            neuron.error = 0.0
             for next_neuron in next_layer:
-                neuron['error'] += next_neuron['weights'][j] * next_neuron['delta']
+                neuron.error += next_neuron.weights[j] * next_neuron.delta
 
     def backward_propagate_grads(self):
         for neuron in self.neurons:
-            neuron['delta'] = neuron['error'] * transfer_derivative(neuron['output'])
+            neuron.delta = neuron.error * transfer_derivative(neuron.output)
 
     def update_weights(self, inputs, l_rate):
         for neuron in self.neurons:
             for j in range(len(inputs)):
-                neuron['weights'][j] -= l_rate * neuron['delta'] * inputs[j]
-            neuron['weights'][-1] -= l_rate * neuron['delta']
+                neuron.weights[j] -= l_rate * neuron.delta * inputs[j]
+            neuron.weights[-1] -= l_rate * neuron.delta
