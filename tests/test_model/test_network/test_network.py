@@ -264,7 +264,7 @@ class TestPredictions(TestNetwork):
             ])
         ]  
         network = Network(layers=layers)
-        predictions = network.predictions(self.data_extracted)
+        predictions = network.test(self.data_extracted)
         self.assertListEqual(predictions, [0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
 if __name__ == '__main__':

@@ -38,7 +38,7 @@ class Trainer:
             network.init(n_hidden, seed=1)
             # network.learn(train_set, self)
             self.train(network, train_set)
-            predicted = network.predictions(test_set)
+            predicted = network.test(test_set)
             # predicted = self.train(train_set, test_set, network)
             actual = [row[-1] for row in validation_set]
             score = metric(actual, predicted)
