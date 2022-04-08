@@ -7,3 +7,10 @@ class Neuron:
 
     def __eq__(self, other):
         return self.weights == other.weights
+
+    # Calculate neuron activation for an input
+    def activate(self, inputs):
+        activation = self.weights[-1]
+        for i in range(len(self.weights)-1):
+            activation += self.weights[i] * inputs[i]
+        return activation

@@ -3,13 +3,6 @@ from math import exp
 
 from deepton.model.neuron import Neuron
 
-# Calculate neuron activation for an input
-def activate(weights, inputs):
-	activation = weights[-1]
-	for i in range(len(weights)-1):
-		activation += weights[i] * inputs[i]
-	return activation
-
 # Transfer neuron activation
 def transfer(activation):
 	return 1.0 / (1.0 + exp(-activation))
@@ -43,7 +36,7 @@ class Layer:
     def forward_propagate(self, inputs):
         new_inputs = []
         for neuron in self.neurons:
-            activation = activate(neuron.weights, inputs)
+            activation = neuron.activate(inputs)
             neuron.output = transfer(activation)
             new_inputs.append(neuron.output)
         return new_inputs
