@@ -45,15 +45,12 @@ class Network:
 
     # Forward propagate input to a network output
     def forward_propagate(self, row):
-        inputs = row
         for layer in self._layers:
-            inputs = layer.forward_propagate(inputs)
-        return inputs
+            row = layer.forward_propagate(row[:])
+        return row
 
     def output_errors(self, expected, outputs):
-        i = len(self._layers)-1
-        layer = self._layers[i]
-        layer.output_errors(expected, outputs)
+        self.layers[-1].output_errors(expected, outputs)
 
     def output_grads(self):
         self.layers[-1].backward_propagate_grads()
