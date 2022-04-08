@@ -60,3 +60,9 @@ class Extract:
 					continue
 				data.append(row)
 		return data
+
+
+class ExtractList(Extract):
+	def __init__(self, list_data):
+		self.data = list_data
+		self._col = Col(self.data)
