@@ -75,23 +75,6 @@ class Network:
                 inputs = [neuron.output for neuron in self._layers[i - 1]]
             layer.update_weights(inputs, l_rate)
 
-    # Backpropagation Algorithm With Stochastic Gradient Descent
-    def learn(self, train_data, trainer):
-        # trainer.train(self)
-        # self.init(trainer.n_hidden, trainer.seed) # later refactor to `trainer.initializer` instead
-        for epoch in range(trainer.n_epoch):
-            for row in train_data:
-                outputs = self.forward_propagate(row)
-                expected = [0 for i in range(self.n_outputs)]
-                # print(f"\n\nn_outputs: {trainer.n_outputs}\n\n")
-                expected[row[-1]] = 1
-                self.output_errors(expected, outputs)
-                self.output_grads()
-                self.backward_propagate_errors()
-                self.backward_propagate_grads()
-                self.update_weights(row, trainer.l_rate)
-        # update here the `trainer.initializer` parameters
-
     # Make a prediction with a network
     def predict(self, row):
         outputs = self.forward_propagate(row)
