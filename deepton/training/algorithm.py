@@ -1,16 +1,14 @@
-from random import seed
 from deepton.data.loader import CrossValidationSplitLoader
 from deepton.model.layer import Layer
 
 from deepton.model.network import Network
 from deepton.model.neuron import Neuron
 
-class Trainer:
+class Backpropagation:
     # Train a network for a fixed number of epochs
-    def __init__(self, l_rate, n_epoch, seed=1):
+    def __init__(self, l_rate, n_epoch):
         self.n_epoch = n_epoch
         self.l_rate = l_rate
-        self.seed = seed
 
     # Backpropagation Algorithm With Stochastic Gradient Descent
     def train(self, network, train_data):

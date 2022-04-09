@@ -9,9 +9,9 @@ from deepton.training.metrics import accuracy
 from deepton.model.network import Network
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
-from deepton.training.trainer import Trainer
+from deepton.training.algorithm import Backpropagation
 
-class TestTrainer(unittest.TestCase):
+class TestBackpropagation(unittest.TestCase):
     def setUp(self) -> None:
         random.seed(1)
         # load and prepare data
@@ -25,19 +25,17 @@ class TestTrainer(unittest.TestCase):
         to_int.fit(self.extracted.col[-1])
         self.extracted.col[-1] = to_int(self.extracted.col[-1])
 
-class TestTrain(TestTrainer):
+class TestTrain(TestBackpropagation):
     def test_simple(self):
         train_data = self.extracted.data
-        trainer = Trainer(l_rate=.5, n_epoch=20)
+        algorithm = Backpropagation(l_rate=.5, n_epoch=20)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         network = Network(layers=[
             Layer(neurons=[Neuron(n_inputs) for _ in range(2)]),
             Layer(neurons=[Neuron(2) for _ in range(n_outputs)])
         ])
-        # network.init(n_hidden=2)
-        # network.learn(train_data, trainer)
-        trainer.train(network, train_data)
+        algorithm.train(network, train_data)
         expected_layers = [
             Layer(neurons=[
                 Neuron(
@@ -72,7 +70,7 @@ class TestTrain(TestTrainer):
         self.assertListEqual(network.layers, expected_network.layers)
 
 
-class TestEvaluate(TestTrainer):
+class TestEvaluate(TestBackpropagation):
     def test_evaluate(self):
         # Test Backprop on Seeds dataset
         # print("Testing back_propagation algorithm:")
@@ -86,8 +84,8 @@ class TestEvaluate(TestTrainer):
         l_rate = 0.3
         n_epoch = 500
         n_hidden = 5
-        trainer = Trainer(l_rate, n_epoch)
-        scores = trainer.evaluate(loader, accuracy, n_hidden)
+        algorithm = Backpropagation(l_rate, n_epoch)
+        scores = algorithm.evaluate(loader, accuracy, n_hidden)
         # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
         # print('Scores: %s' % scores)
         self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])

@@ -7,8 +7,6 @@ from deepton.model.layer import Layer
 
 from deepton.model.network import Network
 from deepton.model.neuron import Neuron
-from deepton.training.trainer import Trainer
-
 
 class TestNetwork(unittest.TestCase):
     def setUp(self) -> None:
