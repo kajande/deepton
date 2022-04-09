@@ -9,7 +9,7 @@ from deepton.training.metrics import accuracy
 from deepton.model.network import Network
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
-from deepton.model.trainer import Trainer
+from deepton.training.trainer import Trainer
 
 class TestTrainer(unittest.TestCase):
     def setUp(self) -> None:
