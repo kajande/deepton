@@ -3,9 +3,9 @@ import random
 from deepton.model.neuron import Neuron
 
 class Layer:
-    def __init__(self, n_inputs=None, n_outputs=None, neurons=None):
+    def __init__(self, neurons=None):
         if neurons is None:
-            self.neurons = [Neuron(n_inputs) for _ in range(n_outputs)]
+            self.neurons = []
         else:
             self.neurons = neurons
 

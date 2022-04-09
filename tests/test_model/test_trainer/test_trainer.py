@@ -32,8 +32,8 @@ class TestTrain(TestTrainer):
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         network = Network(layers=[
-            Layer(n_inputs=n_inputs, n_outputs=2),
-            Layer(n_inputs=2, n_outputs=n_outputs)
+            Layer(neurons=[Neuron(n_inputs) for _ in range(2)]),
+            Layer(neurons=[Neuron(2) for _ in range(n_outputs)])
         ])
         # network.init(n_hidden=2)
         # network.learn(train_data, trainer)

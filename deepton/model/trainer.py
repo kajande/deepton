@@ -3,6 +3,7 @@ from deepton.data.loader import CrossValidationSplitLoader
 from deepton.model.layer import Layer
 
 from deepton.model.network import Network
+from deepton.model.neuron import Neuron
 
 class Trainer:
     # Train a network for a fixed number of epochs
@@ -38,8 +39,8 @@ class Trainer:
             # network = Network(n_inputs, n_outputs)
             # network.init(n_hidden)
             network = Network(layers=[
-                Layer(n_inputs=n_inputs, n_outputs=n_hidden),
-                Layer(n_inputs=n_hidden, n_outputs=n_outputs)
+                Layer(neurons=[Neuron(n_inputs) for _ in range(n_hidden)]),
+                Layer(neurons=[Neuron(n_hidden) for _ in range(n_outputs)]),
             ])
             # print(f"\nnetwork.")
             # network.learn(train_set, self)

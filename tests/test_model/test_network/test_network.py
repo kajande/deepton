@@ -30,8 +30,8 @@ class TestInit(TestNetwork):
     def test_n_inputs_n_hidden_n_outputs(self):        
         # network = Network(2, 2)
         network = Network(layers=[
-            Layer(n_inputs=2, n_outputs=1),
-            Layer(n_inputs=1, n_outputs=2)
+            Layer(neurons=[Neuron(2) for _ in range(1)]),
+            Layer(neurons=[Neuron(1) for _ in range(2)])
         ])
         # network.init(n_hidden=1)
         expected_network = Network(layers=[
