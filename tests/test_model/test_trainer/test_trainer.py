@@ -31,7 +31,7 @@ class TestTrain(TestTrainer):
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
-        network.init(n_hidden=2, seed=1)
+        network.init(n_hidden=2)
         # network.learn(train_data, trainer)
         trainer.train(network, train_data)
         expected_layers = [

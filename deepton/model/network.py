@@ -21,11 +21,11 @@ class Network:
         #     layers = self.from_layers(n_inputs, n_hidden, n_outputs)
         # self._layers = layers
 
-    def init(self, n_hidden, seed):
+    def init(self, n_hidden):
         # Don't call this method if self._layers are already initialized (exist)
         # if self._layers:
         #     raise Exception("This model already has layers")
-        random.seed(seed)
+        random.seed(1)
         hidden_layer = Layer(self.n_inputs, n_hidden)
         output_layer = Layer(n_hidden, self.n_outputs)
         self._layers.extend([hidden_layer, output_layer])

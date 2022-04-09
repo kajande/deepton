@@ -35,7 +35,7 @@ class Trainer:
             n_inputs = len(train_set[0]) - 1
             n_outputs = len(set([row[-1] for row in train_set]))
             network = Network(n_inputs, n_outputs)
-            network.init(n_hidden, seed=1)
+            network.init(n_hidden)
             # network.learn(train_set, self)
             self.train(network, train_set)
             predicted = network.test(test_set)

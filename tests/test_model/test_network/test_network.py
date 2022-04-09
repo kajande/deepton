@@ -27,9 +27,8 @@ class TestNetwork(unittest.TestCase):
 
 class TestInit(TestNetwork):
     def test_n_inputs_n_hidden_n_outputs(self):        
-        seed(1)
         network = Network(2, 2)
-        network.init(n_hidden=1, seed=1)
+        network.init(n_hidden=1)
         expected_network = Network(layers=[
             Layer(neurons=[
                 Neuron(weights=[0.13436424411240122, 0.8474337369372327, 0.763774618976614])
