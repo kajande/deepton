@@ -1,8 +1,12 @@
 from math import exp
+import random
 
 class Neuron:
-    def __init__(self, weights=None, output=None, error=None, delta=None):
-        self.weights = weights
+    def __init__(self, n_inputs=None, weights=None, output=None, error=None, delta=None):
+        if n_inputs:
+            self.weights = [random.random() for i in range(n_inputs + 1)]
+        else:
+            self.weights = weights
         self.output = output
         self.error = error
         self.delta = delta

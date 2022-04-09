@@ -5,12 +5,9 @@ from deepton.model.neuron import Neuron
 class Layer:
     def __init__(self, n_inputs=None, n_outputs=None, neurons=None):
         if neurons is None:
-            self.neurons = [
-                Neuron(weights=[random.random() for i in range(n_inputs + 1)]) for i in range(n_outputs)
-            ]
+            self.neurons = [Neuron(n_inputs) for _ in range(n_outputs)]
         else:
             self.neurons = neurons
-
 
     @property
     def n_inputs(self):
