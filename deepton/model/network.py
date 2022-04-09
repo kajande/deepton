@@ -5,30 +5,19 @@ from deepton.model.layer import Layer
 
 class Network:
     # Initialize a network
-    def __init__(self, n_inputs=None, n_outputs=None, layers=None):
-        # if layers:
-        #     self.layers = layers
-        # else:
-        #     self.layers = self.from_layers(n_inputs, n_hidden, n_outputs)
-        self.n_inputs = n_inputs
-        self.n_outputs = n_outputs
+    def __init__(self, layers=None):
         if layers is None:
             self._layers = []
         else:
             self._layers = layers
 
-        # if not layers:
-        #     layers = self.from_layers(n_inputs, n_hidden, n_outputs)
-        # self._layers = layers
+    @property
+    def n_outputs(self):
+        return self.layers[-1].n_outputs
 
-    def init(self, n_hidden):
-        # Don't call this method if self._layers are already initialized (exist)
-        # if self._layers:
-        #     raise Exception("This model already has layers")
-        random.seed(1)
-        hidden_layer = Layer(self.n_inputs, n_hidden)
-        output_layer = Layer(n_hidden, self.n_outputs)
-        self._layers.extend([hidden_layer, output_layer])
+    @property
+    def n_inputs(self):
+        return self.layers[0].n_inputs
 
     @property
     def layers(self):

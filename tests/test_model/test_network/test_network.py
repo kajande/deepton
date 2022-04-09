@@ -1,5 +1,5 @@
 import unittest
-from random import seed
+import random
 from deepton.data.analysis import minmax
 from deepton.data.extractor import Extract
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
@@ -12,6 +12,7 @@ from deepton.model.trainer import Trainer
 
 class TestNetwork(unittest.TestCase):
     def setUp(self) -> None:
+        random.seed(1)
         self.data_extracted = [
             [2.7810836,2.550537003,0],
             [1.465489372,2.362125076,0],
@@ -27,8 +28,12 @@ class TestNetwork(unittest.TestCase):
 
 class TestInit(TestNetwork):
     def test_n_inputs_n_hidden_n_outputs(self):        
-        network = Network(2, 2)
-        network.init(n_hidden=1)
+        # network = Network(2, 2)
+        network = Network(layers=[
+            Layer(n_inputs=2, n_outputs=1),
+            Layer(n_inputs=1, n_outputs=2)
+        ])
+        # network.init(n_hidden=1)
         expected_network = Network(layers=[
             Layer(neurons=[
                 Neuron(weights=[0.13436424411240122, 0.8474337369372327, 0.763774618976614])

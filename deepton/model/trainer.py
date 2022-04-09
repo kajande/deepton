@@ -1,5 +1,6 @@
 from random import seed
 from deepton.data.loader import CrossValidationSplitLoader
+from deepton.model.layer import Layer
 
 from deepton.model.network import Network
 
@@ -34,8 +35,13 @@ class Trainer:
         for train_set, test_set, validation_set in loader:
             n_inputs = len(train_set[0]) - 1
             n_outputs = len(set([row[-1] for row in train_set]))
-            network = Network(n_inputs, n_outputs)
-            network.init(n_hidden)
+            # network = Network(n_inputs, n_outputs)
+            # network.init(n_hidden)
+            network = Network(layers=[
+                Layer(n_inputs=n_inputs, n_outputs=n_hidden),
+                Layer(n_inputs=n_hidden, n_outputs=n_outputs)
+            ])
+            # print(f"\nnetwork.")
             # network.learn(train_set, self)
             self.train(network, train_set)
             predicted = network.test(test_set)

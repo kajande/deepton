@@ -11,6 +11,15 @@ class Layer:
         else:
             self.neurons = neurons
 
+
+    @property
+    def n_inputs(self):
+        return len(self.neurons[0].weights)-1
+
+    @property
+    def n_outputs(self):
+        return len(self.neurons)
+
     def __eq__(self, other) -> bool:
         return self.neurons == other.neurons
 

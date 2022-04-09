@@ -1,5 +1,5 @@
 import unittest
-from random import seed
+import random
 from deepton.data.analysis import minmax
 from deepton.data.loader import CrossValidationSplitLoader
 from deepton.model.layer import Layer
@@ -13,6 +13,7 @@ from deepton.model.trainer import Trainer
 
 class TestTrainer(unittest.TestCase):
     def setUp(self) -> None:
+        random.seed(1)
         # load and prepare data
         filename = 'example.csv'
         # filename = 'seeds_dataset.csv'
@@ -30,8 +31,11 @@ class TestTrain(TestTrainer):
         trainer = Trainer(l_rate=.5, n_epoch=20)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
-        network = Network(n_inputs=n_inputs, n_outputs=n_outputs)
-        network.init(n_hidden=2)
+        network = Network(layers=[
+            Layer(n_inputs=n_inputs, n_outputs=2),
+            Layer(n_inputs=2, n_outputs=n_outputs)
+        ])
+        # network.init(n_hidden=2)
         # network.learn(train_data, trainer)
         trainer.train(network, train_data)
         expected_layers = [
