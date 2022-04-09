@@ -1,14 +1,12 @@
 from deepton.data.loader import CrossValidationSplitLoader
-from deepton.model.layer import Layer
-
-from deepton.model.network import Network
-from deepton.model.neuron import Neuron
 
 class Backpropagation:
     # Train a network for a fixed number of epochs
-    def __init__(self, l_rate, n_epoch):
+    def __init__(self, l_rate, n_epoch, n_hidden, metric):
         self.n_epoch = n_epoch
         self.l_rate = l_rate
+        self.n_hidden = n_hidden
+        self.metric = metric
 
     # Backpropagation Algorithm With Stochastic Gradient Descent
     def train(self, network, train_data):
@@ -26,26 +24,3 @@ class Backpropagation:
                 network.backward_propagate_grads()
                 network.update_weights(row, self.l_rate)
         # update here the `trainer.initializer` parameters
-
-
-    # Evaluate an algorithm using a cross validation split
-    def evaluate(self, loader, metric, n_hidden):
-        scores = list()
-        for train_set, test_set, validation_set in loader:
-            n_inputs = len(train_set[0]) - 1
-            n_outputs = len(set([row[-1] for row in train_set]))
-            # network = Network(n_inputs, n_outputs)
-            # network.init(n_hidden)
-            network = Network(layers=[
-                Layer(neurons=[Neuron(n_inputs) for _ in range(n_hidden)]),
-                Layer(neurons=[Neuron(n_hidden) for _ in range(n_outputs)]),
-            ])
-            # print(f"\nnetwork.")
-            # network.learn(train_set, self)
-            self.train(network, train_set)
-            predicted = network.test(test_set)
-            # predicted = self.train(train_set, test_set, network)
-            actual = [row[-1] for row in validation_set]
-            score = metric(actual, predicted)
-            scores.append(score)
-        return scores

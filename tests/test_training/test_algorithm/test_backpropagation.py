@@ -1,14 +1,12 @@
 import unittest
 import random
-from deepton.data.analysis import minmax
-from deepton.data.loader import CrossValidationSplitLoader
 from deepton.model.layer import Layer
 from deepton.model.neuron import Neuron
 from deepton.training.metrics import accuracy
 
 from deepton.model.network import Network
 from deepton.data.extractor import Extract
-from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
+from deepton.data.transformer import FloatTransform, IntTransform
 from deepton.training.algorithm import Backpropagation
 
 class TestBackpropagation(unittest.TestCase):
@@ -28,12 +26,12 @@ class TestBackpropagation(unittest.TestCase):
 class TestTrain(TestBackpropagation):
     def test_simple(self):
         train_data = self.extracted.data
-        algorithm = Backpropagation(l_rate=.5, n_epoch=20)
+        algorithm = Backpropagation(l_rate=.5, n_epoch=20, n_hidden=2, metric=accuracy)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         network = Network(layers=[
-            Layer(neurons=[Neuron(n_inputs) for _ in range(2)]),
-            Layer(neurons=[Neuron(2) for _ in range(n_outputs)])
+            Layer(neurons=[Neuron(n_inputs) for _ in range(algorithm.n_hidden)]),
+            Layer(neurons=[Neuron(algorithm.n_hidden) for _ in range(n_outputs)])
         ])
         algorithm.train(network, train_data)
         expected_layers = [
@@ -68,27 +66,3 @@ class TestTrain(TestBackpropagation):
         ]
         expected_network = Network(layers=expected_layers)
         self.assertListEqual(network.layers, expected_network.layers)
-
-
-class TestEvaluate(TestBackpropagation):
-    def test_evaluate(self):
-        # Test Backprop on Seeds dataset
-        # print("Testing back_propagation algorithm:")
-        # normalize input variables
-        normalize = NormalizeTransform()
-        normalize.fit(self.extracted.data, minmax)
-        normalized = normalize(self.extracted.data)
-        n_folds = 5
-        loader = CrossValidationSplitLoader(normalized, n_folds)
-        # evaluate algorithm
-        l_rate = 0.3
-        n_epoch = 500
-        n_hidden = 5
-        algorithm = Backpropagation(l_rate, n_epoch)
-        scores = algorithm.evaluate(loader, accuracy, n_hidden)
-        # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
-        # print('Scores: %s' % scores)
-        self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])
-        mean_accuracy = sum(scores)/float(len(scores))
-        # print('Mean Accuracy: %.3f%%' % (mean_accuracy))
-        self.assertEqual(mean_accuracy, 100.000)
