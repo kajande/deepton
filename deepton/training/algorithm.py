@@ -6,9 +6,11 @@ from deepton.model.neuron import Neuron
 
 class Backpropagation:
     # Train a network for a fixed number of epochs
-    def __init__(self, l_rate, n_epoch):
+    def __init__(self, l_rate, n_epoch, n_hidden, metric):
         self.n_epoch = n_epoch
         self.l_rate = l_rate
+        self.n_hidden = n_hidden
+        self.metric = metric
 
     # Backpropagation Algorithm With Stochastic Gradient Descent
     def train(self, network, train_data):
@@ -29,7 +31,7 @@ class Backpropagation:
 
 
     # Evaluate an algorithm using a cross validation split
-    def evaluate(self, loader, metric, n_hidden):
+    def evaluate(self, loader):
         scores = list()
         for train_set, test_set, validation_set in loader:
             n_inputs = len(train_set[0]) - 1
@@ -37,8 +39,8 @@ class Backpropagation:
             # network = Network(n_inputs, n_outputs)
             # network.init(n_hidden)
             network = Network(layers=[
-                Layer(neurons=[Neuron(n_inputs) for _ in range(n_hidden)]),
-                Layer(neurons=[Neuron(n_hidden) for _ in range(n_outputs)]),
+                Layer(neurons=[Neuron(n_inputs) for _ in range(self.n_hidden)]),
+                Layer(neurons=[Neuron(self.n_hidden) for _ in range(n_outputs)]),
             ])
             # print(f"\nnetwork.")
             # network.learn(train_set, self)
@@ -46,6 +48,6 @@ class Backpropagation:
             predicted = network.test(test_set)
             # predicted = self.train(train_set, test_set, network)
             actual = [row[-1] for row in validation_set]
-            score = metric(actual, predicted)
+            score = self.metric(actual, predicted)
             scores.append(score)
         return scores

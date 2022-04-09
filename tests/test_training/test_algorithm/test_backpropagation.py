@@ -28,12 +28,12 @@ class TestBackpropagation(unittest.TestCase):
 class TestTrain(TestBackpropagation):
     def test_simple(self):
         train_data = self.extracted.data
-        algorithm = Backpropagation(l_rate=.5, n_epoch=20)
+        algorithm = Backpropagation(l_rate=.5, n_epoch=20, n_hidden=2, metric=accuracy)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
         network = Network(layers=[
-            Layer(neurons=[Neuron(n_inputs) for _ in range(2)]),
-            Layer(neurons=[Neuron(2) for _ in range(n_outputs)])
+            Layer(neurons=[Neuron(n_inputs) for _ in range(algorithm.n_hidden)]),
+            Layer(neurons=[Neuron(algorithm.n_hidden) for _ in range(n_outputs)])
         ])
         algorithm.train(network, train_data)
         expected_layers = [
@@ -84,8 +84,8 @@ class TestEvaluate(TestBackpropagation):
         l_rate = 0.3
         n_epoch = 500
         n_hidden = 5
-        algorithm = Backpropagation(l_rate, n_epoch)
-        scores = algorithm.evaluate(loader, accuracy, n_hidden)
+        algorithm = Backpropagation(l_rate, n_epoch, n_hidden, accuracy)
+        scores = algorithm.evaluate(loader)
         # scores = evaluate_algorithm(self.dataset, back_propagation, n_folds, l_rate, n_epoch, n_hidden)
         # print('Scores: %s' % scores)
         self.assertListEqual(scores, [100.0, 100.0, 100.0, 100.0, 100.0])
