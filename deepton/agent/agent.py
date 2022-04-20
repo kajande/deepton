@@ -3,8 +3,11 @@ from deepton.model.layer import Layer
 from deepton.model.network import Network
 
 class Agent:
+    def __init__(self, metric):
+        self.metric = metric
+
     # Evaluate an algorithm using a cross validation split
-    def evaluate(self, algorithm, loader):
+    def evaluate(self, algorithm, loader, *args, **kwargs):
         scores = list()
         for train_set, test_set, validation_set in loader:
             n_inputs = len(train_set[0]) - 1
@@ -12,8 +15,8 @@ class Agent:
             # network = Network(n_inputs, n_outputs)
             # network.init(n_hidden)
             network = Network(layers=[
-                Layer(neurons=[Neuron(n_inputs) for _ in range(algorithm.n_hidden)]),
-                Layer(neurons=[Neuron(algorithm.n_hidden) for _ in range(n_outputs)]),
+                Layer(neurons=[Neuron(n_inputs) for _ in range(kwargs['n_hidden'])]),
+                Layer(neurons=[Neuron(kwargs['n_hidden']) for _ in range(n_outputs)]),
             ])
             # print(f"\nnetwork.")
             # network.learn(train_set, self)
@@ -21,6 +24,6 @@ class Agent:
             predicted = network.test(test_set)
             # predicted = algorithm.train(train_set, test_set, network)
             actual = [row[-1] for row in validation_set]
-            score = algorithm.metric(actual, predicted)
+            score = self.metric(actual, predicted)
             scores.append(score)
         return scores

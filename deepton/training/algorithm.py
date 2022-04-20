@@ -2,11 +2,9 @@ from deepton.data.loader import CrossValidationSplitLoader
 
 class Backpropagation:
     # Train a network for a fixed number of epochs
-    def __init__(self, l_rate, n_epoch, n_hidden, metric):
+    def __init__(self, l_rate, n_epoch):
         self.n_epoch = n_epoch
         self.l_rate = l_rate
-        self.n_hidden = n_hidden
-        self.metric = metric
 
     # Backpropagation Algorithm With Stochastic Gradient Descent
     def train(self, network, train_data):

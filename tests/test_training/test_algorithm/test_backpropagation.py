@@ -26,12 +26,13 @@ class TestBackpropagation(unittest.TestCase):
 class TestTrain(TestBackpropagation):
     def test_simple(self):
         train_data = self.extracted.data
-        algorithm = Backpropagation(l_rate=.5, n_epoch=20, n_hidden=2, metric=accuracy)
+        algorithm = Backpropagation(l_rate=.5, n_epoch=20)
         n_inputs = len(train_data[0]) - 1
         n_outputs = len(set([row[-1] for row in train_data]))
+        n_hidden=2
         network = Network(layers=[
-            Layer(neurons=[Neuron(n_inputs) for _ in range(algorithm.n_hidden)]),
-            Layer(neurons=[Neuron(algorithm.n_hidden) for _ in range(n_outputs)])
+            Layer(neurons=[Neuron(n_inputs) for _ in range(n_hidden)]),
+            Layer(neurons=[Neuron(n_hidden) for _ in range(n_outputs)])
         ])
         algorithm.train(network, train_data)
         expected_layers = [
