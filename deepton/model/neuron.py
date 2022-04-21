@@ -26,5 +26,5 @@ class Neuron:
         self.output = 1.0 / (1.0 + exp(-self.activation))
 
     # Calculate the derivative of an neuron output
-    def transfer_derivative(self, output):
-        return output * (1.0 - output)
+    def backward_propagate_grads(self):
+        self.delta = self.error * (self.output * (1.0 - self.output))
