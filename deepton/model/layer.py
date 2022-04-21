@@ -2,6 +2,9 @@ import random
 
 from deepton.model.neuron import Neuron
 
+def transfer_derivative(output):
+    return output * (1.0 - output)
+
 class Layer:
     def __init__(self, neurons=None):
         if neurons is None:
@@ -49,8 +52,8 @@ class Layer:
 
     def backward_propagate_grads(self):
         for neuron in self.neurons:
-            neuron.delta = neuron.error * neuron.transfer_derivative(neuron.output)
-
+            neuron.backward_propagate_grads()
+            
     def update_weights(self, inputs, l_rate):
         for neuron in self.neurons:
             for j in range(len(inputs)):

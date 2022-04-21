@@ -51,3 +51,6 @@ class TestActivate(TestNeuron):
         neuron.activation = 0.8981388630890152
         neuron.activate()
         self.assertEqual(neuron.output, 0.7105668883115941)
+
+class TestGrad(TestNeuron):
+    pass
