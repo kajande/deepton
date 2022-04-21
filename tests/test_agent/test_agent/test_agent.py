@@ -5,7 +5,7 @@ from deepton.data.extractor import Extract
 from deepton.data.loader import CrossValidationSplitLoader
 from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 from deepton.data.analysis import minmax
-from deepton.training.metrics import accuracy
+from deepton.agent.metrics import accuracy
 from deepton.agent.agent import Agent
 from deepton.training.algorithm import Backpropagation
 

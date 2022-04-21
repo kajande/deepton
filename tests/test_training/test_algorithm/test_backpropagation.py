@@ -2,7 +2,7 @@ import unittest
 import random
 from deepton.model.layer import Layer
 from deepton.model.neuron import Neuron
-from deepton.training.metrics import accuracy
+from deepton.agent.metrics import accuracy
 
 from deepton.model.network import Network
 from deepton.data.extractor import Extract
