@@ -1,8 +1,6 @@
 import unittest
 import random
 from deepton.data.analysis import minmax
-from deepton.data.extractor import Extract
-from deepton.data.transformer import FloatTransform, IntTransform, NormalizeTransform
 from deepton.model.layer import Layer
 
 from deepton.model.network import Network
