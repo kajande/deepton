@@ -42,7 +42,7 @@ class Layer:
 
     def output_errors(self, expected, outputs):
         for j, neuron in enumerate(self.neurons):
-            neuron.error = outputs[j] - expected[j]
+            neuron.output_errors(expected[j], outputs[j])
 
     def backward_propagate_errors(self, next_layer):
         for j, neuron in enumerate(self.neurons):

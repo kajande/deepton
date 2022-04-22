@@ -25,6 +25,9 @@ class Neuron:
     def activate(self):
         self.output = 1.0 / (1.0 + exp(-self.activation))
 
+    def output_errors(self, expected, output):
+        self.error = output - expected
+
     # Calculate the derivative of an neuron output
     def backward_propagate_grads(self):
         self.delta = self.error * (self.output * (1.0 - self.output))
