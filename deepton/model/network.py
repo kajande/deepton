@@ -33,10 +33,10 @@ class Network:
         return self._layers[i]
 
     # Forward propagate input to a network output
-    def forward_propagate(self, row):
+    def forward_propagate(self, inputs):
         for layer in self._layers:
-            row = layer.forward_propagate(row[:])
-        return row
+            layer.forward_propagate(inputs[:])
+            inputs = layer.outputs
 
     def output_errors(self, expected, outputs):
         self.layers[-1].output_errors(expected, outputs)
@@ -63,11 +63,15 @@ class Network:
             else:
                 inputs = [neuron.output for neuron in self._layers[i - 1]]
             layer.update_weights(inputs, l_rate)
+    
+    @property
+    def outputs(self):
+        return self.layers[-1].outputs
 
     # Make a prediction with a network
     def predict(self, row):
-        outputs = self.forward_propagate(row)
-        return outputs.index(max(outputs))
+        self.forward_propagate(row)
+        return self.outputs.index(max(self.outputs))
 
 
     def test(self, test):

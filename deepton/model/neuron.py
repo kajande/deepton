@@ -20,6 +20,7 @@ class Neuron:
         for i in range(len(self.weights)-1):
             activation += self.weights[i] * inputs[i]
         self.activation = activation
+        self.activate()
 
     # Transfer neuron activation
     def activate(self):

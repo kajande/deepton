@@ -33,12 +33,12 @@ class Layer:
         return self.neurons[i]
 
     def forward_propagate(self, inputs):
-        new_inputs = []
         for neuron in self.neurons:
             neuron.forward_propagate(inputs)
-            neuron.activate()
-            new_inputs.append(neuron.output)
-        return new_inputs
+
+    @property
+    def outputs(self):
+        return [neuron.output for neuron in self.neurons]
 
     def output_errors(self, expected, outputs):
         for j, neuron in enumerate(self.neurons):

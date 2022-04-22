@@ -111,7 +111,8 @@ class TestForwardPorpagate(TestNetwork):
         ]
         network = Network(layers=layers)
         row = [1, 0, None]
-        output = network.forward_propagate(row)
+        network.forward_propagate(row)
+        output = [neuron.output for neuron in network.layers[-1]]
         # print(network.layers[0].neurons[0].output)
         self.assertListEqual(output, [0.6629970129852887, 0.7253160725279748])
 
