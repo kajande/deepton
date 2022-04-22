@@ -38,8 +38,8 @@ class Network:
             layer.forward_propagate(inputs[:])
             inputs = layer.outputs
 
-    def output_errors(self, expected, outputs):
-        self.layers[-1].output_errors(expected, outputs)
+    def output_errors(self, expected):
+        self.layers[-1].output_errors(expected)
 
     def output_grads(self):
         self.layers[-1].backward_propagate_grads()

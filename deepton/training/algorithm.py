@@ -11,7 +11,7 @@ class Backpropagation:
                 network.forward_propagate(row)
                 expected = [0 for i in range(network.n_outputs)]
                 expected[row[-1]] = 1
-                network.output_errors(expected, network.outputs)
+                network.output_errors(expected)
                 network.output_grads()
                 network.backward_propagate_errors()
                 network.backward_propagate_grads()

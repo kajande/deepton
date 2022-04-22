@@ -140,7 +140,7 @@ class TestBackwardPropagateError(TestNetwork):
         ]
         network = Network(layers=layers)
         expected = [0, 1]
-        network.output_errors(expected, [0.6213859615555266, 0.6573693455986976])
+        network.output_errors(expected)
         network.output_grads()
         network.backward_propagate_errors()
         network.backward_propagate_grads()
