@@ -46,9 +46,13 @@ class Layer:
 
     def backward_propagate_errors(self, next_layer):
         for j, neuron in enumerate(self.neurons):
-            neuron.error = 0.0
-            for next_neuron in next_layer:
-                neuron.error += next_neuron.weights[j] * next_neuron.delta
+            neuron.backward_propagate_errors(next_layer[j])
+
+    def __getitem__(self, j):
+        errors = []
+        for neuron in self.neurons:
+            errors.append(neuron.weights[j] * neuron.delta)
+        return errors
 
     def backward_propagate_grads(self):
         for neuron in self.neurons:
