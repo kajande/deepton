@@ -56,6 +56,4 @@ class Layer:
             
     def update_weights(self, inputs, l_rate):
         for neuron in self.neurons:
-            for j in range(len(inputs)):
-                neuron.weights[j] -= l_rate * neuron.delta * inputs[j]
-            neuron.weights[-1] -= l_rate * neuron.delta
+            neuron.update_weights(inputs, l_rate)

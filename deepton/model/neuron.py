@@ -32,3 +32,8 @@ class Neuron:
     # Calculate the derivative of an neuron output
     def backward_propagate_grads(self):
         self.delta = self.error * (self.output * (1.0 - self.output))
+
+    def update_weights(self, inputs, l_rate):
+        for j in range(len(inputs)):
+            self.weights[j] -= l_rate * self.delta * inputs[j]
+        self.weights[-1] -= l_rate * self.delta # the bias

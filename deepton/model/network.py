@@ -61,7 +61,7 @@ class Network:
             if i == 0:
                 inputs = row[:-1]
             else:
-                inputs = [neuron.output for neuron in self._layers[i - 1]]
+                inputs = self._layers[i - 1].outputs
             layer.update_weights(inputs, l_rate)
     
     @property
